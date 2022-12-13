@@ -21,7 +21,7 @@ SWEP.Kind                  = WEAPON_HEAVY
 SWEP.WeaponID              = AMMO_SHOTGUN
 
 SWEP.Primary.Ammo          = "Buckshot"
-SWEP.Primary.Damage        = 9
+SWEP.Primary.Damage        = 6
 SWEP.Primary.Cone          = 0.061
 SWEP.Primary.Delay         = 0.4
 SWEP.Primary.ClipSize      = 8
@@ -31,6 +31,8 @@ SWEP.Primary.Automatic     = true
 SWEP.Primary.NumShots      = 8
 SWEP.Primary.Sound         = Sound( "Weapon_XM1014.Single" )
 SWEP.Primary.Recoil        = 12
+SWEP.Secondary.Delay       = 0.6
+
 
 SWEP.Secondary.Automatic   = true
 
@@ -45,8 +47,6 @@ SWEP.WorldModel            = "models/weapons/w_shot_xm1014.mdl"
 
 SWEP.IronSightsPos         = Vector(-6.881, -9.214, 2.66)
 SWEP.IronSightsAng         = Vector(-0.101, -0.7, -0.201)
-
-SWEP.isSlug                = false
 
 function SWEP:SetupDataTables()
    self:NetworkVar("Bool", 0, "Reloading")
@@ -76,7 +76,7 @@ function SWEP:StartReload()
    self:SetIronsights( false )
 
    self:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
-
+   self:SetNextSecondaryFire( CurTime() + self.Secondary.Delay)
    local ply = self:GetOwner()
 
    if not ply or ply:GetAmmoCount(self.Primary.Ammo) <= 0 then
@@ -103,6 +103,7 @@ function SWEP:PerformReload()
 
    -- prevent normal shooting in between reloads
    self:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
+   self:SetNextSecondaryFire( CurTime() + self.Secondary.Delay )
 
    if not ply or ply:GetAmmoCount(self.Primary.Ammo) <= 0 then return end
 
@@ -127,6 +128,7 @@ function SWEP:CanPrimaryAttack()
    if self:Clip1() <= 0 then
       self:EmitSound( "Weapon_Shotgun.Empty" )
       self:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
+      self:SetNextSecondaryFire( CurTime() + self.Secondary.Delay )
       return false
    end
    return true
@@ -135,7 +137,7 @@ end
 function SWEP:Think()
    BaseClass.Think(self)
    if self:GetReloading() then
-      if self:GetOwner():KeyDown(IN_ATTACK) then
+      if self:GetOwner():KeyDown(IN_ATTACK) or self:GetOwner():KeyDown(IN_ATTACK2) then
          self:FinishReload()
          return
       end
@@ -174,28 +176,23 @@ function SWEP:GetHeadshotMultiplier(victim, dmginfo)
    -- Decay from 2 to 1 slowly as distance increases. Note that this used to be
    -- 3+, but at that time shotgun bullets were treated like in HL2 where half
    -- of them were hull traces that could not headshot.
-   if self.isSlug then
-      return 1 + math.max(0, (1.5 - 0.002 * (d ^ 1.1)))
-   else
-      return 1 + math.max(0, (1.0 - 0.002 * (d ^ 1.25)))
-   end
+   return 1 + math.max(0, (1.0 - 0.002 * (d ^ 1.25)))
 end
 
 function SWEP:SecondaryAttack()
-   self.isSlug = true
-
+   self.Primary.Sound    = Sound( "Weapon_Deagle.Single" )
    self.Primary.Damage   = 50
    self.Primary.NumShots = 1
    self.Primary.Cone     = 0.001
    self.BaseClass.PrimaryAttack( self.Weapon, worldsnd )
-   self:SetNextSecondaryFire(CurTime() + 0.8)
+   self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 end
 
 function SWEP:PrimaryAttack()
-   self.isSlug = false
+   self.Primary.Sound    = Sound( "Weapon_XM1014.Single" )
    self.Primary.Cone     = 0.061
    self.Primary.NumShots = 8
-   self.Primary.Damage   = 9
+   self.Primary.Damage   = 6
    self.BaseClass.PrimaryAttack( self.Weapon, worldsnd )
 
 end
