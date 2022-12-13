@@ -39,7 +39,7 @@ if CLIENT then
    SWEP.Icon = "vgui/ttt/lykrast/icon_pp_rbull"
 end
 
-SWEP.Base				= "weapon_tttbase"
+SWEP.Base				= "weapon_tttbase_nofalloff"
 
 SWEP.Spawnable = true
 SWEP.Kind = WEAPON_PISTOL
