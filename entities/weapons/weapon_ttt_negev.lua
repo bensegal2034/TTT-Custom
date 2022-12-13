@@ -21,12 +21,12 @@ SWEP.Kind = WEAPON_HEAVY
 
 SWEP.Primary.Sound 			 = Sound("weapons/tfa_csgo/negev/negev-x-1.wav")
 SWEP.Primary.Recoil 		    = 2.4
-SWEP.Primary.Damage 		    = 15
-SWEP.Primary.Cone 		    = 0.1
+SWEP.Primary.Damage 		    = 20
+SWEP.Primary.Cone 		    = 0.08
 SWEP.Primary.ClipSize       = 300
 SWEP.Primary.DefaultClip    = 600
 SWEP.Primary.ClipMax        = 900
-SWEP.Primary.Delay 		    = 0.075
+SWEP.Primary.Delay 		    = 0.07
 SWEP.Primary.Automatic 		 = true
 SWEP.Primary.Ammo           = "SMG1"
 SWEP.RandomatSpawn          = true
@@ -190,7 +190,9 @@ function SWEP:Reload()
 end
 
 function SWEP:Holster()
-   self.Owner:SetWalkSpeed(220)
+   if IsValid(self.Owner) and self.Owner:IsPlayer() then
+      self.Owner:SetWalkSpeed(220)
+   end
    self:SetIronsights(false)
    self:SetZoom(false)
    return true
