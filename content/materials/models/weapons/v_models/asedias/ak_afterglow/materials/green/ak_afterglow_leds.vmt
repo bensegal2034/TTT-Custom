@@ -1,0 +1,26 @@
+UnlitGeneric
+{
+	$offset 0
+	$seflillum 1
+	$model 1
+
+	Proxies
+	{
+		Sine
+		{
+			sineperiod 10
+			sinemin 0.5
+			sinemax 0.9
+			timeoffset "$offset"
+			resultVar "$color2[0]"
+		}
+
+		Sine
+		{
+			sineperiod 10
+			sinemax 0.27
+			timeoffset "$offset"
+			resultVar "$color2[2]"
+		}
+	}
+}
