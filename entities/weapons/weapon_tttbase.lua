@@ -486,6 +486,11 @@ function SWEP:Initialize()
    if self.SetHoldType then
       self:SetHoldType(self.HoldType or "pistol")
    end
+   hook.Add("ScalePlayerDamage", "ScaleDamage", function(ply, hitgroup, dmginfo)
+      if (hitgroup != HITGROUP_HEAD and hitgroup != HITGROUP_CHEST) then
+         dmginfo:ScaleDamage(2)
+      end
+   end)
 end
 
 function SWEP:CalcViewModel()

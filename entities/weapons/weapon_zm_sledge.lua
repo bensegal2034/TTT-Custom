@@ -13,7 +13,7 @@ if CLIENT then
    SWEP.IconLetter         = "z"
 end
 
-SWEP.Base                  = "weapon_tttbase_nofalloff"
+SWEP.Base                  = "weapon_tttbase"
 
 SWEP.Spawnable             = true
 SWEP.AutoSpawnable         = true

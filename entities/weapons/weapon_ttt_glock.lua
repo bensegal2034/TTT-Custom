@@ -13,7 +13,7 @@ if CLIENT then
    SWEP.IconLetter         = "c"
 end
 
-SWEP.Base                  = "weapon_tttbase_nofalloff"
+SWEP.Base                  = "weapon_tttbase"
 
 SWEP.Primary.Recoil        = 0.9
 SWEP.Primary.Damage        = 8

@@ -13,7 +13,7 @@ if CLIENT then
    SWEP.IconLetter       = "l"
 end
 
-SWEP.Base                = "weapon_tttbase_nofalloff"
+SWEP.Base                = "weapon_tttbase"
 
 SWEP.Kind                = WEAPON_HEAVY
 SWEP.WeaponID            = AMMO_MAC10
