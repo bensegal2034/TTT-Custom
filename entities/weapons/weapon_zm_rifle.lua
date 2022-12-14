@@ -32,7 +32,7 @@ SWEP.SetClipQueued         = false
 SWEP.Secondary.Sound       = Sound("Default.Zoom")
 
 SWEP.HeadshotMultiplier    = 999
-
+SWEP.IsScoped              = false
 SWEP.AutoSpawnable         = true
 SWEP.Spawnable             = true
 SWEP.AmmoEnt               = "item_ammo_357_ttt"
@@ -81,7 +81,13 @@ function SWEP:SecondaryAttack()
    if (CLIENT) then
       self:EmitSound(self.Secondary.Sound)
    end
-
+   if self.IsScoped = false then
+      self.IsScoped = true
+      self.Primary.Cone = 0
+   else
+      self.IsScoped = false
+      self.Primary.Cone = 0.35
+   end
    self:SetNextSecondaryFire( CurTime() + 0.3)
 end
 

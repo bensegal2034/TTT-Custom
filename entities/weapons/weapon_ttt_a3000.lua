@@ -32,7 +32,7 @@ SWEP.Primary.Delay = 0.1125
 SWEP.Primary.Recoil = 3
 SWEP.Primary.Automatic = true
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Damage = 26
+SWEP.Primary.Damage = 20
 SWEP.Primary.Cone = 0.01
 SWEP.Primary.Ammo = "Pistol"
 SWEP.Primary.ClipSize = 12
@@ -46,7 +46,7 @@ SWEP.AllowDrop = true
 SWEP.IsSilent = false
 SWEP.NoSights = false
 SWEP.UseHands = true
-SWEP.HeadshotMultiplier = 3
+SWEP.HeadshotMultiplier = 2
 
 //Sounds/Models\\
 SWEP.ViewModel = "models/weapons/gamefreak/v_pist_glock66.mdl"
