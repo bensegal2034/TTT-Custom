@@ -39,7 +39,7 @@ if CLIENT then
    SWEP.Icon = "vgui/ttt/lykrast/icon_pp_rbull"
 end
 
-SWEP.Base				= "weapon_tttbase_nofalloff"
+SWEP.Base				= "weapon_tttbase"
 
 SWEP.Spawnable = true
 SWEP.Kind = WEAPON_PISTOL
@@ -47,7 +47,7 @@ SWEP.Kind = WEAPON_PISTOL
 SWEP.Primary.Ammo       = "AlyxGun" -- hijack an ammo type we don't use otherwise
 SWEP.Primary.Recoil			= 4
 SWEP.Primary.Damage = 25
-SWEP.Primary.Delay = 0.6
+SWEP.Primary.Delay = 0.4
 SWEP.Primary.Cone = 0.02
 SWEP.Primary.ClipSize = 6
 SWEP.Primary.ClipMax = 36
@@ -78,28 +78,45 @@ sound.Add({
 	sound = "weapons/r_bull/hk.wav",
 })
 
+function SWEP:SetupDataTables()
+	self:NetworkVar( "Int", 0, "WeaponLuck" )
+ 	self:NetworkVar( "Int", 1, "HoldingAces" )
+end
+
 function SWEP:Initialize()
 	if SERVER then
-		self.Luck = math.random(1,6)
-		self.HoldingAces = math.random(1,6)
+		self:SetWeaponLuck(math.random(1,6))
+		self:SetHoldingAces(math.random(1,6))
+	end
+	if CLIENT and self:Clip1() == -1 then
+	   self:SetClip1(self.Primary.DefaultClip)
+	elseif SERVER then
+	   self.fingerprints = {}
+ 
+	   self:SetIronsights(false)
+	end
+ 
+	self:SetDeploySpeed(self.DeploySpeed)
+ 
+	-- compat for gmod update
+	if self.SetHoldType then
+	   self:SetHoldType(self.HoldType or "pistol")
 	end
 end
 
-
 function SWEP:PrimaryAttack(worldsnd)
-	print(self.Luck)
-	print(self.HoldingAces)
 	local owner = self.Owner
 	local delay = self.Primary.Delay
 	local damage = self.Primary.Damage
-	
+	print(self:GetWeaponLuck())
+	print(self:GetHoldingAces())
 	if not IsValid(owner) or owner:IsNPC() or (not owner.ViewPunch) then return end
 
-	if self:Clip1() == self.Luck then
+	if self:Clip1() == self:GetHoldingAces() then
 		damage = damage * 2
 		self.Hawkmoon = true
 	end
-	if self:Clip1() == self.HoldingAces then
+	if self:Clip1() == self:GetWeaponLuck() then
 		damage = damage * 2 
 		self.Hawkmoon = true
 	end
@@ -131,7 +148,7 @@ function SWEP:Reload()
 	self:DefaultReload(self.ReloadAnim)
 	self:SetIronsights( false )
 	if SERVER then
-		self.Luck = math.random(1,6)
-		self.HoldingAces = math.random(1,6)
+		self:SetWeaponLuck(math.random(1,6))
+		self:SetHoldingAces(math.random(1,6))
 	end
 end
