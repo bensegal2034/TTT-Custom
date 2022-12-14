@@ -21,7 +21,7 @@ SWEP.Base = "weapon_tttbase"
 
 SWEP.Kind = WEAPON_HEAVY
 
-SWEP.Primary.DamageBase  = 14
+SWEP.Primary.DamageBase  = 20
 SWEP.Primary.Damage      = SWEP.Primary.DamageBase
 SWEP.HeadshotMultiplier  = 2
 SWEP.Primary.Delay       = 0.30
