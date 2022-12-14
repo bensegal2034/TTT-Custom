@@ -81,11 +81,11 @@ function SWEP:SecondaryAttack()
    if (CLIENT) then
       self:EmitSound(self.Secondary.Sound)
    end
-   if self.IsScoped = false then
+   if self.IsScoped == false then
       self.IsScoped = true
       self.Primary.Cone = 0
    else
-      self.IsScoped = false
+      self.IsScoped == false
       self.Primary.Cone = 0.35
    end
    self:SetNextSecondaryFire( CurTime() + 0.3)
