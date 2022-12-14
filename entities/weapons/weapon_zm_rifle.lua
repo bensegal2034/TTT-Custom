@@ -23,7 +23,7 @@ SWEP.Primary.Recoil        = 7
 SWEP.Primary.Automatic     = true
 SWEP.Primary.Ammo          = "357"
 SWEP.Primary.Damage        = 1
-SWEP.Primary.Cone          = 0
+SWEP.Primary.Cone          = 0.35
 SWEP.Primary.ClipSize      = 3
 SWEP.Primary.ClipMax       = 9 -- keep mirrored to ammo
 SWEP.Primary.DefaultClip   = 3
@@ -85,7 +85,7 @@ function SWEP:SecondaryAttack()
       self.IsScoped = true
       self.Primary.Cone = 0
    else
-      self.IsScoped == false
+      self.IsScoped = false
       self.Primary.Cone = 0.35
    end
    self:SetNextSecondaryFire( CurTime() + 0.3)
