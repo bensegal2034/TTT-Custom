@@ -1,5 +1,5 @@
 AddCSLuaFile()
-
+resource.AddFile( "sound/weapons/slug.wav" )
 DEFINE_BASECLASS "weapon_tttbase"
 
 SWEP.HoldType              = "shotgun"
@@ -180,7 +180,7 @@ function SWEP:GetHeadshotMultiplier(victim, dmginfo)
 end
 
 function SWEP:SecondaryAttack()
-   self.Primary.Sound    = Sound( "Weapon_Deagle.Single" )
+   self.Primary.Sound    = Sound("weapons/slug.wav")
    self.Primary.Damage   = 50
    self.Primary.NumShots = 1
    self.Primary.Cone     = 0.001
