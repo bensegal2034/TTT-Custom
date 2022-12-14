@@ -30,7 +30,7 @@ SWEP.AccuracyDelay = 0.2
 SWEP.MovementInaccuracy = false
 
 SWEP.FirstShotAccuracy = true
-SWEP.FirstShotDelay = 1.5
+SWEP.FirstShotDelay = 0.5
 SWEP.FSAccuracyTimer = 0
 
 -- Model settings
