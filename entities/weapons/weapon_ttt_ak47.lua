@@ -15,8 +15,8 @@ SWEP.HoldType = "ar2"
 SWEP.Primary.Ammo = "pistol"
 SWEP.Primary.Delay = 0.095
 SWEP.Primary.Recoil = 1.7
-SWEP.Primary.Cone = 0.04
-SWEP.Primary.Damage = 27
+SWEP.Primary.Cone = 0.02
+SWEP.Primary.Damage = 25
 SWEP.Primary.Automatic = true
 SWEP.Primary.ClipSize = 30
 SWEP.Primary.ClipMax = 90
@@ -24,10 +24,14 @@ SWEP.Primary.DefaultClip = 35
 SWEP.Primary.Sound = Sound( "Weapon_AK47.Single" )
 SWEP.AutoSpawnable         = true
 SWEP.Spawnable             = true
-SWEP.HeadshotMultiplier    = 4
+SWEP.HeadshotMultiplier    = 5.2
 SWEP.AccuracyTimer = 0
 SWEP.AccuracyDelay = 0.2
+SWEP.MovementInaccuracy = false
 
+SWEP.FirstShotAccuracy = true
+SWEP.FirstShotDelay = 1.5
+SWEP.FSAccuracyTimer = 0
 
 -- Model settings
 SWEP.UseHands = true
@@ -81,17 +85,41 @@ end
 function SWEP:Think()
    if self.Owner:KeyDown(IN_FORWARD) then
       self.Primary.Cone = 0.5
+      self.MovementInaccuracy = true
       self.AccuracyTimer = CurTime() + self.AccuracyDelay
    elseif self.Owner:KeyDown(IN_BACK) then
       self.Primary.Cone = 0.5
+      self.MovementInaccuracy = true
       self.AccuracyTimer = CurTime() + self.AccuracyDelay
    elseif self.Owner:KeyDown(IN_MOVELEFT) then
       self.Primary.Cone = 0.5
+      self.MovementInaccuracy = true
       self.AccuracyTimer = CurTime() + self.AccuracyDelay
    elseif self.Owner:KeyDown(IN_MOVERIGHT) then
       self.Primary.Cone = 0.5
+      self.MovementInaccuracy = true
       self.AccuracyTimer = CurTime() + self.AccuracyDelay
    elseif CurTime() > self.AccuracyTimer then
       self.Primary.Cone = 0.02
+      self.MovementInaccuracy = false
    end
+
+   if self.FirstShotAccuracy == true and self.MovementInaccuracy == false then
+      self.Primary.Cone = 0.02
+   elseif self.MovementInaccuracy != true then
+      self.Primary.Cone = 0.1
+   end
+   if CurTime() > self.FSAccuracyTimer then
+      self.FirstShotAccuracy = true
+   end
+
+end
+
+function SWEP:PrimaryAttack()
+   self.BaseClass.PrimaryAttack( self.Weapon, worldsnd )
+   if self:Clip1() > 0 then
+      self.FirstShotAccuracy = false
+      self.FSAccuracyTimer = CurTime() + self.FirstShotDelay
+   end
+   self:SetNextSecondaryFire( CurTime() + 0.1 )
 end
