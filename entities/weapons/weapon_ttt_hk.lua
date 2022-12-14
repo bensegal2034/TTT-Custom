@@ -104,13 +104,18 @@ function SWEP:Initialize()
 	end
 end
 
-function SWEP:PrimaryAttack(worldsnd)
+function SWEP:PrimaryAttack()
 	local owner = self.Owner
 	local delay = self.Primary.Delay
 	local damage = self.Primary.Damage
 	print(self:GetWeaponLuck())
 	print(self:GetHoldingAces())
 	if not IsValid(owner) or owner:IsNPC() or (not owner.ViewPunch) then return end
+
+	self:SetNextSecondaryFire( CurTime() + delay )
+	self:SetNextPrimaryFire( CurTime() + delay )
+
+	if not self:CanPrimaryAttack() then return end
 
 	if self:Clip1() == self:GetHoldingAces() then
 		damage = damage * 2
@@ -120,17 +125,8 @@ function SWEP:PrimaryAttack(worldsnd)
 		damage = damage * 2 
 		self.Hawkmoon = true
 	end
-
-	self:SetNextSecondaryFire( CurTime() + delay )
-	self:SetNextPrimaryFire( CurTime() + delay )
-
-	if not self:CanPrimaryAttack() then return end
-
-	if not worldsnd then
-		self:EmitSound( self.Primary.Sound, self.Primary.SoundLevel )
-	elseif SERVER then
-		sound.Play(self.Primary.Sound, self:GetPos(), self.Primary.SoundLevel)
-	end
+		
+	self:EmitSound( self.Primary.Sound, self.Primary.SoundLevel )
 
 	self:ShootBullet( damage, self.Primary.Recoil, self.Primary.NumShots, self:GetPrimaryCone() )
 	
@@ -139,7 +135,7 @@ function SWEP:PrimaryAttack(worldsnd)
 	owner:ViewPunch( Angle( math.Rand(-0.2,-0.1) * self.Primary.Recoil, math.Rand(-0.1,0.1) *self.Primary.Recoil, 0 ) )
 	
 	if self.Hawkmoon then
-		Entity(1):EmitSound("Hawkmoon")
+		self:EmitSound("Hawkmoon")
 		self.Hawkmoon = false
 	end
 end
