@@ -108,8 +108,6 @@ function SWEP:PrimaryAttack()
 	local owner = self.Owner
 	local delay = self.Primary.Delay
 	local damage = self.Primary.Damage
-	print(self:GetWeaponLuck())
-	print(self:GetHoldingAces())
 	if not IsValid(owner) or owner:IsNPC() or (not owner.ViewPunch) then return end
 
 	self:SetNextSecondaryFire( CurTime() + delay )
