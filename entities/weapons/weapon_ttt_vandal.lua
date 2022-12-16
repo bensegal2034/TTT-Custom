@@ -20,6 +20,7 @@ if SERVER then
    resource.AddFile("sound/weapons/afterglow/magin_end.wav")
    resource.AddFile("sound/weapons/afterglow/magin_start.wav")
    resource.AddFile("sound/weapons/afterglow/magout.wav")
+   resource.AddFile("materials/vgui/killicons/killbanner.png")
    resource.AddWorkshop("2892783240")
    
    util.AddNetworkString("PlayerDeathVandal")
@@ -28,7 +29,6 @@ end
 if CLIENT then
    SWEP.PrintName = "Vandal"
    SWEP.Slot = 2
-   SWEP.Icon = "vgui/killicons/tfa_rgxv"
 
    require("cl_weapon_ttt_vandal")
 
@@ -36,7 +36,7 @@ if CLIENT then
       local successful = net.ReadBool()
       if successful then
          ClientVars.KillCount = ClientVars.KillCount + 1
-         ClientVars.KillSoundBuffer = true
+         ClientVars.KillEffectBuffer = true
       end
    end)
 end
@@ -119,26 +119,52 @@ SWEP.NoSights = false
 function SWEP:Initialize()
    if CLIENT then
       ClientVars.KillCount = 0
-      ClientVars.KillSoundBuffer = false
+      ClientVars.KillEffectBuffer = false
+   end
+end
+
+if CLIENT then
+   local killBanner = Material("vgui/killicons/killbanner.png", "noclamp smooth")
+   
+   function SWEP:DrawHUD()
+      local scrW = ScrW()
+      local scrH = ScrH()
+
+      if ClientVars.DrawKillBanner then
+         surface.SetMaterial(killBanner)
+         surface.SetDrawColor(255, 255, 255, 255)
+         surface.DrawTexturedRect(scrW * 0.4485, scrH * 0.65, 200, 256)
+      end
+
+      self.BaseClass.DrawHUD(self)
    end
 end
 
 function SWEP:Think()
    if CLIENT then
-      if ClientVars.KillSoundBuffer == true then
+      if ClientVars.KillEffectBuffer == true then
          if ClientVars.KillCount == 1 then
-            EmitSound(Sound("weapons/afterglow/killsound1.wav"), self:GetOwner():GetPos(), -1, CHAN_STATIC, 1, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
+            EmitSound(Sound("weapons/afterglow/killsound1.wav"), self:GetOwner():GetPos(), -2, CHAN_STATIC, 1, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
          elseif ClientVars.KillCount == 2 then
-            EmitSound(Sound("weapons/afterglow/killsound2.wav"), self:GetOwner():GetPos(), -1, CHAN_STATIC, 1, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
+            EmitSound(Sound("weapons/afterglow/killsound2.wav"), self:GetOwner():GetPos(), -2, CHAN_STATIC, 1, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
          elseif ClientVars.KillCount == 3 then
-            EmitSound(Sound("weapons/afterglow/killsound3.wav"), self:GetOwner():GetPos(), -1, CHAN_STATIC, 1, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
+            EmitSound(Sound("weapons/afterglow/killsound3.wav"), self:GetOwner():GetPos(), -2, CHAN_STATIC, 1, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
          elseif ClientVars.KillCount == 4 then
-            EmitSound(Sound("weapons/afterglow/killsound4.wav"), self:GetOwner():GetPos(), -1, CHAN_STATIC, 1, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
+            EmitSound(Sound("weapons/afterglow/killsound4.wav"), self:GetOwner():GetPos(), -2, CHAN_STATIC, 1, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
          elseif ClientVars.KillCount >= 5 then
-            EmitSound(Sound("weapons/afterglow/killsound5.wav"), self:GetOwner():GetPos(), -1, CHAN_STATIC, 1, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
+            EmitSound(Sound("weapons/afterglow/killsound5.wav"), self:GetOwner():GetPos(), -2, CHAN_STATIC, 1, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
          end
+         ClientVars.DrawKillBanner = true
+         ClientVars.KillBannerDelayTimer = CurTime() + ClientVars.KillBannerDelay
 
-         ClientVars.KillSoundBuffer = false
+         ClientVars.KillEffectBuffer = false
+      end
+
+      if ClientVars.DrawKillBanner then
+         if CurTime() > ClientVars.KillBannerDelayTimer then
+            ClientVars.DrawKillBanner = false
+            ClientVars.KillBannerDelayTimer = 0
+         end
       end
    end
 
