@@ -21,8 +21,8 @@ SWEP.Kind                  = WEAPON_HEAVY
 SWEP.WeaponID              = AMMO_SHOTGUN
 
 SWEP.Primary.Ammo          = "Buckshot"
-SWEP.Primary.Damage        = 6
-SWEP.Primary.Cone          = 0.061
+SWEP.Primary.Damage        = 8
+SWEP.Primary.Cone          = 0.075
 SWEP.Primary.Delay         = 0.4
 SWEP.Primary.ClipSize      = 8
 SWEP.Primary.ClipMax       = 24
@@ -183,16 +183,16 @@ function SWEP:SecondaryAttack()
    self.Primary.Sound    = Sound("weapons/slug.wav")
    self.Primary.Damage   = 50
    self.Primary.NumShots = 1
-   self.Primary.Cone     = 0.001
+   self.Primary.Cone     = 0
    self.BaseClass.PrimaryAttack( self.Weapon, worldsnd )
    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
 end
 
 function SWEP:PrimaryAttack()
    self.Primary.Sound    = Sound( "Weapon_XM1014.Single" )
-   self.Primary.Cone     = 0.061
+   self.Primary.Cone     = 0.075
    self.Primary.NumShots = 8
-   self.Primary.Damage   = 6
+   self.Primary.Damage   = 8
    self.BaseClass.PrimaryAttack( self.Weapon, worldsnd )
 
 end
