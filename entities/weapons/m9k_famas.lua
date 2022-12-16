@@ -175,6 +175,8 @@ function SWEP:Initialize()
       ClientVars.KillClipActive = false
       ClientVars.KillClipDelayTimer = 0
    end
+   
+   self:SetDeploySpeed(self.DeploySpeed)
 end
 
 if CLIENT then
