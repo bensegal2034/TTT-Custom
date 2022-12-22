@@ -66,9 +66,9 @@ function SWEP:Initialize()
       self:SetHoldType(self.HoldType or "pistol")
    end
    hook.Add("PlayerHurt", "CranialSpike", function(victim, attacker, healthRemaining, damageTaken)
-      if (attacker == self:GetOwner()) and attacker:IsPlayer() then
+      if (attacker == self:GetOwner()) and attacker:IsPlayer() and IsValid(attacker) and IsValid(self:GetOwner()) then
          if (damageTaken > 79) then
-            if self:GetOwner():GetActiveWeapon():GetClass() == self:GetClass() then
+            if self:GetOwner():GetActiveWeapon():GetClass() == self:GetClass()then
                self.CranialSpikeCounter = self.CranialSpikeCounter + 1
                self.CranialSpikeTimer = CurTime() + self.CranialSpikeDelay
             end

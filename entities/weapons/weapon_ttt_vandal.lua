@@ -1,6 +1,5 @@
 if SERVER then
    AddCSLuaFile("weapon_ttt_vandal.lua")
-   AddCSLuaFile("includes/modules/cl_weapon_ttt_vandal.lua")
 
    resource.AddFile("sound/weapons/afterglow/boltpull.wav")
    resource.AddFile("sound/weapons/afterglow/equip_start.wav")
@@ -30,13 +29,13 @@ if CLIENT then
    SWEP.PrintName = "Vandal"
    SWEP.Slot = 2
 
-   require("cl_weapon_ttt_vandal")
-
    net.Receive("PlayerDeathVandal", function()
-      local successful = net.ReadBool()
-      if successful then
-         ClientVars.KillCount = ClientVars.KillCount + 1
-         ClientVars.KillEffectBuffer = true
+      weapon = net.ReadEntity()
+      if IsValid(weapon) then
+         weapon.KillCount = weapon.KillCount + 1
+         weapon.KillEffectBuffer = true
+      else
+         print("An error occurred while handling incoming Vandal death event!")
       end
    end)
 end
@@ -46,8 +45,11 @@ if SERVER then
       local weapon = dmginfo:GetAttacker():GetActiveWeapon()
 
       if weapon:GetClass() == "weapon_ttt_vandal" then
+         weapon.KillCount = weapon.KillCount + 1
+         weapon.KillEffectBuffer = true
+
          net.Start("PlayerDeathVandal")
-            net.WriteBool(true)
+            net.WriteEntity(weapon)
          net.Broadcast()
       end
    end)
@@ -82,45 +84,31 @@ SWEP.ViewModelFOV = 70
 SWEP.ViewModel = "models/weapons/v_rif_rgxv.mdl"
 SWEP.WorldModel = "models/weapons/w_rif_rgxv.mdl"
 SWEP.InPulloutAnim = false
-
 SWEP.IronSightsPos = Vector( -6.518, -4.646, 2.134 )
 SWEP.IronSightsAng = Vector( 2.737, 0.158, 0 )
 
---- TTT config values
-
--- Kind specifies the category this weapon is in. Players can only carry one of
--- each. Can be: WEAPON_... MELEE, PISTOL, HEAVY, NADE, CARRY, EQUIP1, EQUIP2 or ROLE.
--- Matching SWEP.Slot values: 0      1       2     3      4      6       7        8
+-- TTT settings
 SWEP.Kind = WEAPON_HEAVY
-
--- The AmmoEnt is the ammo entity that can be picked up when carrying this gun.
 SWEP.AmmoEnt = "item_ammo_pistol_ttt"
-
--- CanBuy is a table of ROLE_* entries like ROLE_TRAITOR and ROLE_DETECTIVE. If
--- a role is in this table, those players can buy this.
 SWEP.CanBuy = {}
-
--- InLoadoutFor is a table of ROLE_* entries that specifies which roles should
--- receive this weapon as soon as the round starts. In this case, none.
 SWEP.InLoadoutFor = { nil }
-
--- If LimitedStock is true, you can only buy one per round.
 SWEP.LimitedStock = true
-
--- If AllowDrop is false, players can't manually drop the gun with Q
 SWEP.AllowDrop = true
-
--- If IsSilent is true, victims will not scream upon death.
 SWEP.IsSilent = false
-
--- If NoSights is true, the weapon won't have ironsights
 SWEP.NoSights = false
 
+-- Kill banner settings
+SWEP.KillCount = 0
+SWEP.KillEffectBuffer = false
+SWEP.DrawKillBanner = false
+SWEP.KillBannerDelayTimer = 0
+SWEP.KillBannerDelay = 2.5
+
 function SWEP:Initialize()
-   if CLIENT then
-      ClientVars.KillCount = 0
-      ClientVars.KillEffectBuffer = false
-   end
+   self.KillCount = 0
+   self.KillEffectBuffer = false
+   self.DrawKillBanner = false
+   self.KillBannerDelayTimer = 0
 end
 
 if CLIENT then
@@ -130,7 +118,7 @@ if CLIENT then
       local scrW = ScrW()
       local scrH = ScrH()
 
-      if ClientVars.DrawKillBanner then
+      if self.DrawKillBanner then
          surface.SetMaterial(killBanner)
          surface.SetDrawColor(255, 255, 255, 255)
          surface.DrawTexturedRect(scrW * 0.4485, scrH * 0.65, 200, 256)
@@ -142,28 +130,28 @@ end
 
 function SWEP:Think()
    if CLIENT then
-      if ClientVars.KillEffectBuffer == true then
-         if ClientVars.KillCount == 1 then
+      if self.KillEffectBuffer == true then
+         if self.KillCount == 1 then
             EmitSound(Sound("weapons/afterglow/killsound1.wav"), self:GetOwner():GetPos(), -2, CHAN_STATIC, 1, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
-         elseif ClientVars.KillCount == 2 then
+         elseif self.KillCount == 2 then
             EmitSound(Sound("weapons/afterglow/killsound2.wav"), self:GetOwner():GetPos(), -2, CHAN_STATIC, 1, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
-         elseif ClientVars.KillCount == 3 then
+         elseif self.KillCount == 3 then
             EmitSound(Sound("weapons/afterglow/killsound3.wav"), self:GetOwner():GetPos(), -2, CHAN_STATIC, 1, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
-         elseif ClientVars.KillCount == 4 then
+         elseif self.KillCount == 4 then
             EmitSound(Sound("weapons/afterglow/killsound4.wav"), self:GetOwner():GetPos(), -2, CHAN_STATIC, 1, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
-         elseif ClientVars.KillCount >= 5 then
+         elseif self.KillCount >= 5 then
             EmitSound(Sound("weapons/afterglow/killsound5.wav"), self:GetOwner():GetPos(), -2, CHAN_STATIC, 1, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
          end
-         ClientVars.DrawKillBanner = true
-         ClientVars.KillBannerDelayTimer = CurTime() + ClientVars.KillBannerDelay
+         self.DrawKillBanner = true
+         self.KillBannerDelayTimer = CurTime() + self.KillBannerDelay
 
-         ClientVars.KillEffectBuffer = false
+         self.KillEffectBuffer = false
       end
 
-      if ClientVars.DrawKillBanner then
-         if CurTime() > ClientVars.KillBannerDelayTimer then
-            ClientVars.DrawKillBanner = false
-            ClientVars.KillBannerDelayTimer = 0
+      if self.DrawKillBanner then
+         if CurTime() > self.KillBannerDelayTimer then
+            self.DrawKillBanner = false
+            self.KillBannerDelayTimer = 0
          end
       end
    end
