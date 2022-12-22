@@ -1,0 +1,5 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "vgui/ttt/uk/icon_marksman"
+	"$translucent" 1
+}
