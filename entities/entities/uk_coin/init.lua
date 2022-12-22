@@ -62,7 +62,6 @@ function uk_coins_TryCompleteRicoshot()
 
     if complete then
         if last != nil then
-            print("trying to complete ricoshot")
             local zero = last
             local damage = 75
             local radius = 92580
@@ -80,7 +79,6 @@ function uk_coins_TryCompleteRicoshot()
                     end
                 end
             end
-            print("hits: ", hits)
         end
     end
 end
@@ -88,7 +86,6 @@ end
 function uk_coins_RegisterCoin(ent)
 	if not uk_coins_CoinSetContains(coins, ent) then
 		table.insert(coins, ent)
-		print(uk_coins_GetTableLength(coins))
 	end
 end
 
@@ -111,15 +108,12 @@ end
 
 local minimumRicoshotDistance = 20
 function ENT:OnTakeDamage(dmg)
-    print("ricoshot")
     PrintTable(coins)
     SetCoinAsRicoshotted(self)
     for k, v in pairs(coins) do
         if v != nil then
             if v != self then
-                print("existing coin")
                 if v:IsValid() then
-                    print("non-null coin")
                     if not v:GetTable().ricoshotted then
                         local tbl = v:GetTable()
                         tbl.ricoshotted = true
@@ -142,7 +136,6 @@ function ENT:OnTakeDamage(dmg)
 
 
                         util.ParticleTracer("AR2Tracer", self:GetPos(), v:GetPos(), true)
-                        print(self, ":", " bing")
                     end
                 end
             end
