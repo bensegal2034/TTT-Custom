@@ -13,6 +13,9 @@ if ( SERVER ) then
 	resource.AddFile( "sound/shotgraple.wav" )
 	resource.AddFile( "sound/loops.wav" )
 	resource.AddFile( "sound/grabgraple.wav" )
+	resource.AddWorkshop("2899702992")
+	AddCSLuaFile("entities/entities/ent_fres_lina.lua")
+	AddCSLuaFile("autorun/grapple.lua")
 end
 SWEP.Author		= "Engineer_ZY"
 SWEP.Instructions	= ""
