@@ -64,8 +64,8 @@ function uk_coins_TryCompleteRicoshot()
         if last != nil then
             print("trying to complete ricoshot")
             local zero = last
-            local damage = 75
-            local radius = 92580
+            local damage = 100
+            local radius = 9999999999999
             local victims = ents.FindInSphere(zero:GetPos(), radius)
             local hits = 0
             for k, v in pairs(victims) do
@@ -155,6 +155,7 @@ function ENT:Initialize()
     local tbl = self:GetTable()
     tbl.ricoshotted = false
     tbl.damageToTransfer = nil
+    tbl.takeDamage = false
     self:SetTable(tbl)
     uk_coins_RegisterCoin(self)
     
@@ -176,4 +177,12 @@ function ENT:Think()
     local dragAmount = 0.1
     local dragVelocity = Vector(0, 0, -self:GetPhysicsObject():GetVelocity().z)
     self:GetPhysicsObject():AddVelocity(dragVelocity * dragAmount)
+
+    if self:GetTable().takeDamage then
+        print("bwehhh!!!!!")
+        self:OnTakeDamage(1)
+        local tbl = self:GetTable()
+        tbl.takeDamage = false
+        self.SetTable(tbl)
+    end
 end

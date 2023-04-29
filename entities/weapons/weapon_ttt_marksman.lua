@@ -92,7 +92,7 @@ function SWEP:PrimaryAttack()
 
 	-- Make sure we can shoot first
 	if ( !self:CanPrimaryAttack()) then
-	return
+		return
 	end
 
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay) -- this is how you delay something
@@ -107,9 +107,27 @@ function SWEP:PrimaryAttack()
 	local e = Angle(-0.2, 0, 0.0)
 	-- Punch the player's view
 	if ( !self.Owner:IsNPC() ) then
-	self.Owner:ViewPunch( e )
-	self.Owner:SetViewPunchAngles(e)
-	-- util.ParticleTracer("test", self.Owner:GetShootPos(), )
+		self.Owner:ViewPunch( e )
+		self.Owner:SetViewPunchAngles(e)
+		-- util.ParticleTracer("test", self.Owner:GetShootPos(), )
+	end
+	local tr = util.TraceLine( {
+		start = self:GetOwner():EyePos(),
+		endpos = self:GetOwner():EyePos() + self:GetOwner():EyeAngles():Forward() * 10000,
+		filter = function( ent ) return ( ent:GetClass() == "uk_coin" ) end
+	} )
+	local coins = ents.FindInSphere(tr.HitPos, 10)
+	for k, v in pairs(coins) do
+		if v != nil then
+			if v:IsValid() then
+				if v:GetClass() == "uk_coin" then
+					local tbl = v:GetTable()
+					tbl.takeDamage = true
+					v:SetTable(tbl)
+					print(v:GetTable().takeDamage)
+				end
+			end
+		end
 	end
 
 end
@@ -129,7 +147,11 @@ function SWEP:SecondaryAttack()
 		coin:Activate()
 		local offset = Vector(0, 0, 62) + (self.Owner:GetForward() * 52)
 		coin:SetPos(self.Owner:GetViewEntity():GetPos() + offset)
-		coin:GetPhysicsObject():SetVelocity(((self.Owner:GetForward() * 1620) + self.Owner:GetUp() * 360) + self.Owner:GetVelocity())
+
+		local phys = coin:GetPhysicsObject()
+		phys:SetVelocity(((self.Owner:GetForward() * 1620) + self.Owner:GetUp() * 360) + self.Owner:GetVelocity())
+		phys:SetAngleVelocity(Vector(1000, 1000, 1000))
+		
 		coin:SetOwner(self)
 		local tbl = coin:GetTable()
 		tbl.OwningPlayer = self.Owner
@@ -330,30 +352,4 @@ end
 -----------------------------------------------------------]]
 function SWEP:SetDeploySpeed( speed )
 	self.m_WeaponDeploySpeed = tonumber( speed )
-end
-
---[[---------------------------------------------------------
-	Name: DoImpactEffect
-	Desc: Callback so the weapon can override the impact effects it makes
-		 return true to not do the default thing - which is to call UTIL_ImpactTrace in c++
------------------------------------------------------------]]
-function SWEP:DoImpactEffect( tr, nDamageType )
-
-	if tr["Hit"] then
-		
-
-		local spark = EffectData()
-		spark:SetOrigin(tr["HitPos"])
-		spark:SetNormal(tr["HitNormal"])
-		spark:SetMagnitude(2)
-		spark:SetRadius(2)
-		spark:SetScale(2)
-		util.Effect("Sparks", spark)
-	end
-
-	--util.ParticleTracer("AR2Impact", tr["StartPos"], tr["HitPos"], true)
-	--util.ParticleTracer("GaussTracer", tr["StartPos"], tr["HitPos"], true)
-
-	return false
-
 end
