@@ -1,0 +1,10 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "kerosenn\ultrakill\npc\boss\v2\whip_lash"
+
+	"$phong" "1"
+	"$phongtint" "[0.2 0.4 1]"
+	"$phongexponent" "0.66"
+	"$phongboost" "0.25"	
+	"$phongfresnelranges"	"[1 2 4]"
+}
