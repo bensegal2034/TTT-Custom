@@ -1,3 +1,19 @@
+if SERVER then
+	AddCSLuaFile()
+	resource.AddFile( "materials/fryingpan/pan.vmt" )
+	resource.AddFile( "materials/fryingpan/pan.vtf" )
+	resource.AddFile( "models/weapons/c_crowbar_nohands/c_crowbar_nohands.dx80.vtx" )
+	resource.AddFile( "models/weapons/c_crowbar_nohands/c_crowbar_nohands.dx90.vtx" )
+	resource.AddFile( "models/weapons/c_crowbar_nohands/c_crowbar_nohands.mdl" )
+	resource.AddFile( "models/weapons/c_crowbar_nohands/c_crowbar_nohands.sw.vtx" )
+	resource.AddFile( "models/weapons/c_crowbar_nohands/c_crowbar_nohands.vvd" )
+	resource.AddFile( "sound/weapons/cbar_miss1.wav")
+	resource.AddFile( "sound/weapons/pan/melee_frying_pan_01.wav")
+	resource.AddFile( "sound/weapons/pan/melee_frying_pan_02.wav")
+	resource.AddFile( "sound/weapons/pan/melee_frying_pan_03.wav")
+	resource.AddFile( "sound/weapons/pan/melee_frying_pan_04.wav")
+	resource.AddWorkshop("2598540535")
+end
 SWEP.Spawnable = true
 SWEP.AdminOnly = false
 

@@ -36,6 +36,12 @@ if SERVER then
 	resource.AddFile( "materials/models/weapons/v_models/aw50/m82.vmt" )
 	resource.AddFile( "materials/models/weapons/v_models/aw50/stuff.vmt" )
 	resource.AddFile( "materials/models/weapons/v_models/aw50/stuff.vtf" )
+	resource.AddFile( "materials/models/weapons/c_ukrailcannon.dx80.vtx" )
+	resource.AddFile( "materials/models/weapons/c_ukrailcannon.dx90.vtx" )
+	resource.AddFile( "materials/models/weapons/c_ukrailcannon.mdl" )
+	resource.AddFile( "materials/models/weapons/c_ukrailcannon.sw.vtx" )
+	resource.AddFile( "materials/models/weapons/c_ukrailcannon.vvd" )
+	resource.AddWorkshop("2824736215")
 end
 
 SWEP.HoldType           = "ar2"

@@ -1,5 +1,18 @@
 if ( SERVER ) then
-AddCSLuaFile()
+	AddCSLuaFile()
+	resource.AddFile( "materials/vgui/ttt/icon_whiplash.vmt" )
+	resource.AddFile( "materials/vgui/ttt/icon_whiplash.vtf" )
+	resource.AddFile( "materials/kerosenn/ultrakill/npc/boss/v2/whip_lash.vtf" )
+	resource.AddFile( "materials/kerosenn/ultrakill/npc/boss/v2/whip_lash.vmt" )
+	resource.AddFile( "models/kerosenn/ultrakill/npc/boss/v2/prop/whiplash_hook.dx80.vtx" )
+	resource.AddFile( "models/kerosenn/ultrakill/npc/boss/v2/prop/whiplash_hook.dx90.vtx" )
+	resource.AddFile( "models/kerosenn/ultrakill/npc/boss/v2/prop/whiplash_hook.mdl" )
+	resource.AddFile( "models/kerosenn/ultrakill/npc/boss/v2/prop/whiplash_hook.phy" )
+	resource.AddFile( "models/kerosenn/ultrakill/npc/boss/v2/prop/whiplash_hook.sw.vtx" )
+	resource.AddFile( "models/kerosenn/ultrakill/npc/boss/v2/prop/whiplash_hook.vvd" )
+	resource.AddFile( "sound/shotgraple.wav" )
+	resource.AddFile( "sound/loops.wav" )
+	resource.AddFile( "sound/grabgraple.wav" )
 end
 SWEP.Author		= "Engineer_ZY"
 SWEP.Instructions	= ""
