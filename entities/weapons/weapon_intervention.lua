@@ -54,12 +54,14 @@ SWEP.AllowedShootDelayTimer = 0
 
 SWEP.PreviousScopeState = false
 
+SWEP.OldYaw = 0
+SWEP.OldYawTimer = 0
+
 function SWEP:Initialize()
    if SERVER then
-      result = self:PhysicsInitSphere(100, "default")
       local phys = self:GetPhysicsObject()
       phys:EnableGravity(true)
-      phys:AddVelocity(Vector(5000, 5000, 5000))
+      phys:AddVelocity(Vector(500, 500, 500))
 
       local rf = RecipientFilter()
       rf:AddAllPlayers()
@@ -107,9 +109,14 @@ function SWEP:PreDrop()
       self.Owner:SetGravity(1)
    end
 
-    self:SetZoom(false)
-    self:SetIronsights(false)
-    return self.BaseClass.PreDrop(self)
+   self:SetZoom(false)
+   self:SetIronsights(false)
+   return self.BaseClass.PreDrop(self)
+end
+
+function SWEP:OnDrop()
+   local phys = self:GetPhysicsObject()
+   phys:AddVelocity(Vector(400, 0, 400))
 end
 
 function SWEP:Reload()
@@ -221,6 +228,12 @@ function SWEP:Think()
       -- we weren't scoped in on the last frame and now we are scoped in
       self.AllowedShootDelayTimer = CurTime() + self.AllowedShootDelay
    end
+   -- math.abs(self.OldYaw - current)
+
 
    self.PreviousScopeState = self:GetIronsights()
+   local angles = self.Owner:GetAngles()
+   if CLIENT then print(angles.yaw) end
+
+   
 end
