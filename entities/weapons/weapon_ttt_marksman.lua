@@ -29,7 +29,7 @@ SWEP.DrawAmmo = false
 SWEP.BounceWeaponIcon = false
 SWEP.Primary.Delay = 0.55
 SWEP.BobScale = 0.8
-SWEP.AutoSpawnable      = true
+SWEP.AutoSpawnable      = false
 SWEP.Spawnable		= true
 SWEP.AdminOnly		= false
 SWEP.Base               = "weapon_tttbase"
@@ -45,7 +45,7 @@ local ccoins = 4
 local regenInterval = 1.5
 local cr = 0
 
-SWEP.CanBuy = { ROLE_DETECTIVE }
+SWEP.CanBuy = {}
 
 if CLIENT then
 	-- Path to the icon material
