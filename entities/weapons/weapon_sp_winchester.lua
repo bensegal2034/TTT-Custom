@@ -32,8 +32,7 @@ SWEP.AutoSpawnable      = true
 SWEP.AmmoEnt = "item_ammo_357_ttt"
 SWEP.CranialSpikeCounter = 0
 SWEP.CranialSpikeMultiplier = 4
-SWEP.CranialSpikeDelay = 15
-SWEP.CranialSpikeTimer = 0
+
 
 SWEP.HeadshotMultiplier = 2
 
@@ -50,7 +49,20 @@ SWEP.IronSightsAng = Vector(0, 0, 0)
 
 SWEP.reloadtimer = 0
 
+if CLIENT then
+   net.Receive("CranialSpikeCounter", function()
+      ClientVars.CranialSpikeCounter = net.ReadInt(32)
+   end)
+end
+
+if SERVER then
+   util.AddNetworkString("CranialSpikeCounter")
+end
+
 function SWEP:Initialize()
+   if CLIENT then
+      ClientVars.CranialSpikeCounter = 0
+   end
    if CLIENT and self:Clip1() == -1 then
       self:SetClip1(self.Primary.DefaultClip)
    elseif SERVER then
@@ -66,18 +78,18 @@ function SWEP:Initialize()
       self:SetHoldType(self.HoldType or "pistol")
    end
    hook.Add("PlayerHurt", "CranialSpike", function(victim, attacker, healthRemaining, damageTaken)
-      if (attacker == self:GetOwner()) and attacker:IsPlayer() and IsValid(attacker) and IsValid(self:GetOwner()) then
+      if (attacker == self:GetOwner()) and attacker:IsPlayer() then
          if (damageTaken > 79) then
             if self:GetOwner():GetActiveWeapon():GetClass() == self:GetClass() then
                self.CranialSpikeCounter = self.CranialSpikeCounter + 1
-               self.CranialSpikeTimer = CurTime() + self.CranialSpikeDelay
-               print(self.CranialSpikeCounter)
+               net.Start("CranialSpikeCounter")
+                  net.WriteInt(math.floor(self.CranialSpikeCounter), 32)
+               net.Broadcast()
             end
          end
       end
    end)
 end
-
 
 function SWEP:SetZoom(state)
    if CLIENT then return end
@@ -202,11 +214,6 @@ function SWEP:PrimaryAttack( worldsnd )
 end
 
 function SWEP:Think()
-   if self.CranialSpikeCounter > 0 then
-      if CurTime() > self.CranialSpikeTimer then
-         self.CranialSpikeCounter = 0
-      end
-   end
    if self.CranialSpikeCounter > 5 then
       self.CranialSpikeCounter = 5
    end
@@ -253,3 +260,25 @@ function SWEP:SecondaryAttack()
    self:SetNextSecondaryFire( CurTime() + 0.3 )
 end
 
+if CLIENT then
+   function SWEP:DrawHUD()
+      self.BaseClass.DrawHUD(self)
+
+      local scrW = ScrW()
+      local scrH = ScrH()
+
+      local dropShadowPosCranialSpike = {w = scrW * 0.009, h = scrH * 0.8452}
+      local textPosCranialSpike = {w = scrW * 0.0083, h = scrH * 0.843}
+      local xOffsetCranialSpike = 3
+      local numXOffsetCranialSpike = 105
+      local numYOffsetCranialSpike = 1.15
+
+      draw.RoundedBox(10, scrW * 0.005, scrH * 0.839, 209, 35, Color(73, 75, 77, 150))
+      surface.SetTextColor(0, 0, 0, 255)
+      surface.SetTextPos(dropShadowPosCranialSpike.w + xOffsetCranialSpike, dropShadowPosCranialSpike.h)
+      surface.DrawText("Cranial Spike x" .. ClientVars.CranialSpikeCounter)
+      surface.SetTextColor(255, 255, 255, 255)
+      surface.SetTextPos(textPosCranialSpike.w + xOffsetCranialSpike, textPosCranialSpike.h)
+      surface.DrawText("Cranial Spike x" .. ClientVars.CranialSpikeCounter)
+   end
+end
