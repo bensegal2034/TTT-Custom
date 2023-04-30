@@ -59,6 +59,11 @@ end
 
 function SWEP:PrimaryAttack( worldsnd )
    local currentClip = self:Clip1() 
+   if self.IsScoped == true then
+      self.Primary.Cone = 0
+   else
+      self.Primary.Cone = 0.35
+   end
    self.BaseClass.PrimaryAttack( self.Weapon, worldsnd )
    self:SetNextSecondaryFire( CurTime() + 0.1 )
    local traceRes = self.Owner:GetEyeTrace()
@@ -72,6 +77,11 @@ end
 function SWEP:SecondaryAttack()
    if not self.IronSightsPos then return end
    if self:GetNextSecondaryFire() > CurTime() then return end
+   if self.IsScoped == false then
+      self.IsScoped = true
+   else
+      self.IsScoped = false
+   end
 
    local bIronsights = not self:GetIronsights()
 
@@ -81,19 +91,14 @@ function SWEP:SecondaryAttack()
    if (CLIENT) then
       self:EmitSound(self.Secondary.Sound)
    end
-   if self.IsScoped == false then
-      self.IsScoped = true
-      self.Primary.Cone = 0
-   else
-      self.IsScoped = false
-      self.Primary.Cone = 0.35
-   end
    self:SetNextSecondaryFire( CurTime() + 0.3)
 end
-
 function SWEP:PreDrop()
    self:SetZoom(false)
    self:SetIronsights(false)
+   if self.IsScoped == true then
+      self.IsScoped = false
+   end
    return self.BaseClass.PreDrop(self)
 end
 
@@ -102,12 +107,18 @@ function SWEP:Reload()
    self:DefaultReload( ACT_VM_RELOAD )
    self:SetIronsights( false )
    self:SetZoom( false )
+   if self.IsScoped == true then
+      self.IsScoped = false
+   end
 end
 
 
 function SWEP:Holster()
    self:SetIronsights(false)
    self:SetZoom(false)
+   if self.IsScoped == true then
+      self.IsScoped = false
+   end
    return true
 end
 

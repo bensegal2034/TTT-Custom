@@ -31,7 +31,7 @@ SWEP.Primary.NumShots = 1
 SWEP.AutoSpawnable      = true
 SWEP.AmmoEnt = "item_ammo_357_ttt"
 SWEP.CranialSpikeCounter = 0
-SWEP.CranialSpikeMultiplier = 4
+SWEP.CranialSpikeMultiplier = 5
 
 
 SWEP.HeadshotMultiplier = 2
