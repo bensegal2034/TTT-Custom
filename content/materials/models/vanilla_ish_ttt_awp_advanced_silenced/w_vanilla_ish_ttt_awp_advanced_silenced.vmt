@@ -1,0 +1,5 @@
+VertexLitGeneric
+{
+	"$basetexture" "models/vanilla_ish_ttt_awp_advanced_silenced/w_vanilla_ish_ttt_awp_advanced_silenced"
+	"$surfaceprop" "weapon"
+}

@@ -1,0 +1,19 @@
+VertexLitGeneric
+{
+	//Main
+	$basetexture "models/weapons/v_models/asedias/AK_Afterglow/Chromas/Green/AK_Afterglow_DF"
+	$bumpmap "models/weapons/v_models/asedias/AK_Afterglow/Chromas/Green/AK_Afterglow_NM"
+	$model 1
+
+	//Phong
+	$phong 1
+	$phongfresnelranges "[0.18 0.59 1]"
+	$phongexponent 5
+	$phongboost 2
+	$basemapalphaphongmask 1
+
+	//Environment Reflections
+	$envmap				env_cubemap
+	$envmaptint			"[.05 .05 .05]"
+	$normalmapalphaenvmapmask 1
+}
