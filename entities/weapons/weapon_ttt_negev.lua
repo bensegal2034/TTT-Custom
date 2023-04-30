@@ -21,7 +21,7 @@ SWEP.Kind = WEAPON_HEAVY
 
 SWEP.Primary.Sound 			 = Sound("weapons/tfa_csgo/negev/negev-x-1.wav")
 SWEP.Primary.Recoil 		    = 2.4
-SWEP.Primary.Damage 		    = 20
+SWEP.Primary.Damage 		    = 10
 SWEP.Primary.Cone 		    = 0.08
 SWEP.Primary.ClipSize       = 300
 SWEP.Primary.DefaultClip    = 600
@@ -37,6 +37,7 @@ SWEP.ModulationRecoil       = 1
 SWEP.ModulationCone			= 1
 SWEP.ModulationSpeed   = 220
 SWEP.ModulationTime			= nil
+SWEP.ModulationDMG         = 1
 SWEP.AmmoEnt = "item_ammo_smg1_ttt"
 --SWEP.OriginalSpeed = 0
 SWEP.IsFiring = false
@@ -101,10 +102,13 @@ end
 function SWEP:PrimaryAttack(worldsnd)
 
    local recoil = self.Primary.Recoil * self.ModulationRecoil
+   local modulatedDMG = self.Primary.Damage * self.ModulationDMG
    self.ModulationTime = CurTime() + 0.5
    self.ModulationRecoil = math.max(0.2, self.ModulationRecoil * 0.96)
    self.ModulationCone = math.max(0.01, self.ModulationCone * 0.97)
-   self.ModulationSpeed = math.max(0.1, self.ModulationSpeed * 0.98)
+   self.ModulationSpeed = math.max(0.1, self.ModulationSpeed * 0.975)
+   self.ModulationDMG = self.ModulationDMG * 1.01
+   dmg = math.min(50, modulatedDMG)
 
    self:SetNextSecondaryFire( CurTime() + self.Primary.Delay )
    self:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
@@ -117,8 +121,8 @@ function SWEP:PrimaryAttack(worldsnd)
       sound.Play(self.Primary.Sound, self:GetPos(), self.Primary.SoundLevel)
    end
 
-   self:ShootBullet( self.Primary.Damage, recoil, self.Primary.NumShots, self:GetPrimaryCone() )
-
+   self:ShootBullet( dmg, recoil, self.Primary.NumShots, self:GetPrimaryCone() )
+   print(dmg)
    self:TakePrimaryAmmo( 1 )
    self.Owner:SetWalkSpeed(self.ModulationSpeed)
    self.IsFiring = true
@@ -141,7 +145,9 @@ function SWEP:Think()
       self.FiringTimer = CurTime() + self.FiringDelay
    end
 	if self.ModulationTime and CurTime() > self.ModulationTime then
-		self.Owner:SetWalkSpeed(220)
+		if IsValid(self.Owner) and self.Owner:IsPlayer() then
+         self.Owner:SetWalkSpeed(220)
+      end
       self.ModulationTime = nil
 		self.ModulationRecoil = 1
 		self.ModulationCone = 1

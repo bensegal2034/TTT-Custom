@@ -21,7 +21,7 @@ SWEP.AutoSpawnable         = true
 SWEP.Kind                  = WEAPON_HEAVY
 SWEP.WeaponID              = AMMO_M249
 
-SWEP.Primary.Damage        = 2
+SWEP.Primary.Damage        = 4
 SWEP.Primary.Delay         = 0
 SWEP.Primary.Cone          = 0.04
 SWEP.Primary.ClipSize      = 300

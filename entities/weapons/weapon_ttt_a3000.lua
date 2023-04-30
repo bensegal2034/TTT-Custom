@@ -32,7 +32,7 @@ SWEP.Primary.Delay = 0.1125
 SWEP.Primary.Recoil = 3
 SWEP.Primary.Automatic = true
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Damage = 20
+SWEP.Primary.Damage = 18
 SWEP.Primary.Cone = 0.01
 SWEP.Primary.Ammo = "Pistol"
 SWEP.Primary.ClipSize = 12
@@ -66,8 +66,8 @@ end
 
 function SWEP:SecondaryAttack()
   self.Primary.NumShots = 3
-  self.Primary.Delay = 0.1125
-  self.Primary.Cone     = 0.10
+  self.Primary.Delay = 0.175
+  self.Primary.Cone     = 0.125
   self:TakePrimaryAmmo(2)
   self.BaseClass.PrimaryAttack( self.Weapon, worldsnd )
   self:SetNextSecondaryFire(CurTime() + 0.4)
