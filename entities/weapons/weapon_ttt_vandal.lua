@@ -34,6 +34,7 @@ if CLIENT then
       if IsValid(weapon) then
          weapon.KillCount = weapon.KillCount + 1
          weapon.KillEffectBuffer = true
+         weapon.FirstShotAccuracy = true
       else
          print("An error occurred while handling incoming Vandal death event!")
       end
@@ -47,6 +48,7 @@ if SERVER then
       if weapon:GetClass() == "weapon_ttt_vandal" then
          weapon.KillCount = weapon.KillCount + 1
          weapon.KillEffectBuffer = true
+         weapon.FirstShotAccuracy = true
 
          net.Start("PlayerDeathVandal")
             net.WriteEntity(weapon)
@@ -74,6 +76,7 @@ SWEP.AutoSpawnable         = true
 SWEP.Spawnable             = true
 SWEP.HeadshotMultiplier    = 4
 SWEP.FirstShotAccuracy = true
+SWEP.FirstShotAccuracyBullets = 0
 SWEP.FirstShotDelay = 1.5
 SWEP.AccuracyTimer = 0
 
@@ -158,12 +161,15 @@ function SWEP:Think()
 
    if CurTime() > self.AccuracyTimer then
       self.FirstShotAccuracy = true
+      self.FirstShotAccuracyBullets = 0
    end
    
    if self.FirstShotAccuracy then
       self.Primary.Cone = 0.001
    else
-      self.Primary.Cone = 1
+      self.Primary.Cone = 0 + (self.FirstShotAccuracyBullets / 10)
+      -- ((((self.AccuracyTimer - CurTime()) - 0) * 100) / (1.5 - 0)) / 100
+      -- formula for making accuracy start out at fully inaccurate and slowly decay over time
    end
 end
 
@@ -172,8 +178,13 @@ function SWEP:PrimaryAttack(worldsnd)
       return
    end
    self.BaseClass.PrimaryAttack( self.Weapon, worldsnd )
-   if self:Clip1() > 0 then
-      self.FirstShotAccuracy = false
+   if self:Clip1() > 0 and IsFirstTimePredicted() == false then
+      if self.KillEffectBuffer then
+         self.FirstShotAccuracy = true
+      else
+         self.FirstShotAccuracy = false
+         self.FirstShotAccuracyBullets = self.FirstShotAccuracyBullets + 1
+      end
       self.AccuracyTimer = CurTime() + self.FirstShotDelay
    end
    self:SetNextSecondaryFire( CurTime() + 0.1 )
