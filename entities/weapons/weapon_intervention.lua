@@ -233,7 +233,7 @@ function SWEP:Think()
 
    self.PreviousScopeState = self:GetIronsights()
    local angles = self.Owner:GetAngles()
-   if CLIENT then print(angles.yaw) end
+   --if CLIENT then print(angles.yaw) end
 
    
 end

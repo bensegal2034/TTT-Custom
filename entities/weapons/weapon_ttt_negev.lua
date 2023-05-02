@@ -122,7 +122,6 @@ function SWEP:PrimaryAttack(worldsnd)
    end
 
    self:ShootBullet( dmg, recoil, self.Primary.NumShots, self:GetPrimaryCone() )
-   print(dmg)
    self:TakePrimaryAmmo( 1 )
    self.Owner:SetWalkSpeed(self.ModulationSpeed)
    self.IsFiring = true
