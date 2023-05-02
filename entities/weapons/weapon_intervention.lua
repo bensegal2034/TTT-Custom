@@ -54,8 +54,34 @@ SWEP.AllowedShootDelayTimer = 0
 
 SWEP.PreviousScopeState = false
 
-SWEP.OldYaw = 0
-SWEP.OldYawTimer = 0
+-- stolen code
+SWEP.oRot = 0.0
+SWEP.maxDecay = 3;
+SWEP.decay = 0;
+SWEP.decayInc = 0.015;
+SWEP.decayDec = SWEP.maxDecay/10;
+SWEP.rotToDecDecay = 5; --minimum rotation required in one frame to lower the amount of decay temporarily
+SWEP.endCrutch = 40 -- the leeway one has when doing the 360 (you don't have to get exactly 360 to do it)
+
+SWEP.shootTime = 1.10 --this is just a random number I chose. The amount of time you have to shoot
+SWEP.rotDir = 1 --1 for clockwise, -1 for counter-clockwise
+SWEP.wasAbleToShoot = false
+SWEP.startTime = 0
+SWEP.Reloadaftershoot = 0 				-- Can't reload when firing
+
+
+function angleDifference(a1, a2)
+	local angDiff = a1 - a2
+	while (angDiff > 180) do
+		angDiff = (angDiff - 360)
+	end
+	while (angDiff < -180) do
+		angDiff = (angDiff + 360)
+	end
+	return angDiff
+end
+
+-- end stolen code
 
 function SWEP:Initialize()
    if SERVER then
@@ -228,12 +254,67 @@ function SWEP:Think()
       -- we weren't scoped in on the last frame and now we are scoped in
       self.AllowedShootDelayTimer = CurTime() + self.AllowedShootDelay
    end
-   -- math.abs(self.OldYaw - current)
-
-
    self.PreviousScopeState = self:GetIronsights()
-   local angles = self.Owner:GetAngles()
-   --if CLIENT then print(angles.yaw) end
-
    
+   -- stolen code
+   if SERVER then
+		local angles = self.Owner:GetAimVector():Angle()
+		local angDiff = angleDifference(angles.y, self.oRot)
+		local ccRot = self:GetCCRot();
+		local cRot = self:GetCRot();
+
+		if (math.abs(angDiff) > self.rotToDecDecay) then
+			self.decay = math.max(self.decay - self.decayDec, 0);
+		else
+			self.decay = math.min(self.decay + self.decayInc, self.maxDecay);
+		end
+
+		ccRot = ccRot - angDiff --ccRot is the opposite
+		cRot = cRot + angDiff
+
+		ccRot = ccRot - self.decay;
+		cRot = cRot - self.decay;
+
+		ccRot = math.max(ccRot, 0);
+		cRot = math.max(cRot, 0);
+
+		if (!self.wasAbleToShoot and self:GetCanShoot()) then
+			self.wasAbleToShoot = true
+		elseif (wasAbleToShoot and !self:GetCanShoot()) then
+			self.wasAbleToShoot = false
+		end
+
+		if (cRot > ccRot and self.rotDir == -1) then --this if statement is what creates the smooth transition between switching back and forth between rotation directions, resetting the values when swapping
+			self.rotDir = 1
+			ccRot = 0
+		elseif (ccRot > cRot and self.rotDir == -1) then
+			self.rotDir = -1
+			cRot = 0
+		end
+		if (cRot > 360 - self.endCrutch or ccRot > 360 - self.endCrutch) then
+			if (!self:GetCanShoot() and self:Clip1() > 0) then
+				if (!timer.Exists("NoScopeAwp".. self:EntIndex())) then --prevents stacking of the timer
+					timer.Create("NoScopeAwp".. self:EntIndex(), self.shootTime, 1, function()
+						self:SetCanShoot(false) --changes the value back
+						self.Weapon:EmitSound("360noscopeawp.ChargeDown") --power down noise at pos (other players can hear)
+					 end)
+				end
+				--I hate this but for some reason by creating a timer and then emitting the sound it works
+				--Please forgive my spaghetti code
+				self:SetCanShoot(true)
+			end
+			if (cRot > 360 - self.endCrutch) then --automatically resets the value of the rotation distance that triggered the ability to shoot
+				cRot = 0
+			else
+				ccRot = 0
+			end
+		end
+		self.oRot = angles.y
+		self:SetCCRot(ccRot)
+		self:SetCRot(cRot)
+		if (timer.Exists("NoScopeAwp".. self:EntIndex())) then
+			self:SetTimeLeft(timer.TimeLeft("NoScopeAwp".. self:EntIndex()))
+		end
+	end
+   -- end stolen code
 end
