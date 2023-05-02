@@ -111,34 +111,6 @@ SWEP.ReloadingStageTimer = CurTime()
 SWEP.Idle = 0
 SWEP.IdleTimer = CurTime()
 
---SWEP.Speed = 176
-SWEP.CrosshairDistance = 24
-
-SWEP.Primary.Sound = Sound( "Weapon_CSGO_Revolver.Single" )
-SWEP.Primary.ClipSize = 8
-SWEP.Primary.DefaultClip = 8
-SWEP.Primary.Automatic = false
-SWEP.Primary.Damage = 50
-SWEP.Primary.TakeAmmo = 1
-SWEP.Primary.Spread = 0.002
-SWEP.Primary.SpreadMin = 0.002
-SWEP.Primary.SpreadMax = 0.065
-SWEP.Primary.SpreadKick = 0.05
-SWEP.Primary.SpreadMove = 0.065
-SWEP.Primary.SpreadAir = 0.065
-SWEP.Primary.SpreadAlt = 0.08
-SWEP.Primary.SpreadTimer = CurTime()
-SWEP.Primary.SpreadTime = 0.9
-SWEP.Primary.NumberofShots = 1
-SWEP.Primary.Delay = 0.5
-SWEP.Primary.Force = 3
-
-SWEP.Secondary.ClipSize = 0
-SWEP.Secondary.DefaultClip = 0
-SWEP.Secondary.Automatic = false
-SWEP.Secondary.Ammo = "none"
-SWEP.Secondary.Delay = 0.4
-
 ---------sounds-----------------------------------------------------------
 sound.Add({
 	name = "Weapon_Revolver_CSGO.Single",
@@ -202,6 +174,35 @@ sound.Add({
 	sound = Sound"weapons/csgo/revolver/revolver_prepare.wav"
 })
 -------------------------------------------------------------------------------
+
+--SWEP.Speed = 176
+SWEP.CrosshairDistance = 24
+
+SWEP.Primary.Sound = Sound( "Weapon_CSGO_Revolver.Single" )
+SWEP.Primary.ClipSize = 8
+SWEP.Primary.DefaultClip = 8
+SWEP.Primary.Automatic = false
+SWEP.Primary.Damage = 50
+SWEP.Primary.TakeAmmo = 1
+SWEP.Primary.Spread = 0.002
+SWEP.Primary.SpreadMin = 0.002
+SWEP.Primary.SpreadMax = 0.065
+SWEP.Primary.SpreadKick = 0.05
+SWEP.Primary.SpreadMove = 0.065
+SWEP.Primary.SpreadAir = 0.065
+SWEP.Primary.SpreadAlt = 0.08
+SWEP.Primary.SpreadTimer = CurTime()
+SWEP.Primary.SpreadTime = 0.9
+SWEP.Primary.NumberofShots = 1
+SWEP.Primary.Delay = 0.5
+SWEP.Primary.Force = 3
+
+SWEP.Secondary.ClipSize = 0
+SWEP.Secondary.DefaultClip = 0
+SWEP.Secondary.Automatic = false
+SWEP.Secondary.Ammo = "none"
+SWEP.Secondary.Delay = 0.4
+
 
 function SWEP:Initialize()
 self:SetWeaponHoldType( self.HoldType )
