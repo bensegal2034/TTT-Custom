@@ -76,6 +76,7 @@ SWEP.AllowDrop = true
 SWEP.IsSilent = false
 SWEP.NoSights = true
 SWEP.Primary.ClipMax = 8
+SWEP.ViewModelFOV = 75
 -- end of my edits
 
 SWEP.ViewModelFOV = 80
@@ -206,13 +207,6 @@ function SWEP:Initialize()
 self:SetWeaponHoldType( self.HoldType )
 self.Idle = 0
 self.IdleTimer = CurTime() + 0.5
-end
-
-function SWEP:GetViewModelPosition( pos, ang )
-if CLIENT then
-pos = pos + ang:Forward() * GetConVar( "csgo_vm_y" ):GetInt() + ang:Right() * GetConVar( "csgo_vm_x" ):GetInt() + ang:Up() * GetConVar( "csgo_vm_z" ):GetInt()
-return pos
-end
 end
 
 function SWEP:Deploy()
@@ -364,7 +358,6 @@ function SWEP:IdleAnimation()
 end
 
 function SWEP:Think()
-	self.ViewModelFOV = GetConVar( "csgo_vm_fov" ):GetInt()
 	if self.Hammer == 1 then
 		if !self.Owner:KeyDown( IN_ATTACK ) then
 			self.Hammer = 0

@@ -134,16 +134,16 @@ function SWEP:PrimaryAttack()
 		bullet.AmmoType = "Battery"
 		local hit1, hit2 = tr.HitPos + tr.HitNormal, tr.HitPos - tr.HitNormal
 		self.Owner:SetAnimation( PLAYER_ATTACK1 );	
-		if SERVER then
-			local randomsounds = {
-				"weapons/pan/melee_frying_pan_01.wav",
-				"weapons/pan/melee_frying_pan_02.wav",
-				"weapons/pan/melee_frying_pan_03.wav",
-				"weapons/pan/melee_frying_pan_04.wav",
-			}
-		end
+		local randomsounds = {
+			"weapons/pan/melee_frying_pan_01.wav",
+			"weapons/pan/melee_frying_pan_02.wav",
+			"weapons/pan/melee_frying_pan_03.wav",
+			"weapons/pan/melee_frying_pan_04.wav",
+		}
 		local random = math.random(1, #randomsounds)
-		self.Owner:EmitSound(randomsounds[random], 100, 100, 0.25)
+		if SERVER then
+			self.Owner:EmitSound(randomsounds[random], 100, 100, 0.25)
+		end
 		
 		util.ScreenShake( Vector(0,0,0), 5, 5, 0.2, 5000 )
 		self.Owner:ViewPunch(Angle( -2, -2, 0 ))
