@@ -81,14 +81,22 @@ function angleDifference(a1, a2)
 	return angDiff
 end
 
+function SWEP:SetupDataTables()
+
+	self:NetworkVar("Float", 0, "CRot");
+	self:NetworkVar("Float", 1, "CCRot");
+	self:NetworkVar("Float", 2, "TimeLeft");
+	self:NetworkVar("Bool", 0, "CanBodyshot");
+
+   self:NetworkVar("Bool", 3, "IronsightsPredicted")
+   self:NetworkVar("Float", 3, "IronsightsTime")
+
+end
+
 -- end stolen code
 
 function SWEP:Initialize()
    if SERVER then
-      local phys = self:GetPhysicsObject()
-      phys:EnableGravity(true)
-      phys:AddVelocity(Vector(500, 500, 500))
-
       local rf = RecipientFilter()
       rf:AddAllPlayers()
       players = rf:GetPlayers()
@@ -96,6 +104,25 @@ function SWEP:Initialize()
          players[i]:SetGravity(1)
       end
    end
+
+   hook.Add("ScalePlayerDamage", "EnableBodyshots", function(target, hitgroup, dmginfo)
+      local weapon = dmginfo:GetAttacker():GetActiveWeapon()
+
+      if weapon:GetClass() == "weapon_intervention" then
+         if weapon:GetCanBodyshot() then
+            dmginfo:ScaleDamage(10)
+            weapon:SetCanBodyshot(false)
+            if (timer.Exists("NoScopeAwp".. self:EntIndex())) then
+               timer.Remove("NoScopeAwp".. self:EntIndex())
+            end
+         end
+      end
+   end)
+
+   -- stolen code
+   self:SetCCRot(0) --the counter-clockwise rotation
+   self:SetCRot(0) --the clockwise rotation
+   self:SetTimeLeft(0)
 end
 
 function SWEP:SetZoom(state)
@@ -242,6 +269,7 @@ function SWEP:PrimaryAttack(worldsnd)
          self.BaseClass.PrimaryAttack( self.Weapon, worldsnd )
          self.ReloadFiringDelayTimer = 0
          self.IsReloading = false
+         self:SetNextSecondaryFire(CurTime() + 0.01)
       end
    else
       -- shoot delay timer expired, can't shoot
@@ -255,7 +283,7 @@ function SWEP:Think()
       self.AllowedShootDelayTimer = CurTime() + self.AllowedShootDelay
    end
    self.PreviousScopeState = self:GetIronsights()
-   
+
    -- stolen code
    if SERVER then
 		local angles = self.Owner:GetAimVector():Angle()
@@ -278,9 +306,9 @@ function SWEP:Think()
 		ccRot = math.max(ccRot, 0);
 		cRot = math.max(cRot, 0);
 
-		if (!self.wasAbleToShoot and self:GetCanShoot()) then
+		if (!self.wasAbleToShoot and self:GetCanBodyshot()) then
 			self.wasAbleToShoot = true
-		elseif (wasAbleToShoot and !self:GetCanShoot()) then
+		elseif (wasAbleToShoot and !self:GetCanBodyshot()) then
 			self.wasAbleToShoot = false
 		end
 
@@ -292,16 +320,13 @@ function SWEP:Think()
 			cRot = 0
 		end
 		if (cRot > 360 - self.endCrutch or ccRot > 360 - self.endCrutch) then
-			if (!self:GetCanShoot() and self:Clip1() > 0) then
+			if (!self:GetCanBodyshot() and self:Clip1() > 0) then
 				if (!timer.Exists("NoScopeAwp".. self:EntIndex())) then --prevents stacking of the timer
 					timer.Create("NoScopeAwp".. self:EntIndex(), self.shootTime, 1, function()
-						self:SetCanShoot(false) --changes the value back
-						self.Weapon:EmitSound("360noscopeawp.ChargeDown") --power down noise at pos (other players can hear)
+						self:SetCanBodyshot(false) --changes the value back
 					 end)
 				end
-				--I hate this but for some reason by creating a timer and then emitting the sound it works
-				--Please forgive my spaghetti code
-				self:SetCanShoot(true)
+				self:SetCanBodyshot(true)
 			end
 			if (cRot > 360 - self.endCrutch) then --automatically resets the value of the rotation distance that triggered the ability to shoot
 				cRot = 0
