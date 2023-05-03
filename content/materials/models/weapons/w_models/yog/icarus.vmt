@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$basetexture"			"models\weapons\v_models\yog\icarus_diffuse"
+	"$bumpmap"			"models\weapons\v_models\yog\icarus_normal"
+	"$phongexponenttexture"		"models\weapons\v_models\yog\icarus_exponent"
+}

@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$basetexture"			"models\weapons\v_models\yog\yoglight_diffuse"
+	"$bumpmap"			"models\weapons\v_models\yog\yoglight_normal"
+	"$phongexponenttexture"		"models\weapons\v_models\yog\yoglight_exponent"
+}

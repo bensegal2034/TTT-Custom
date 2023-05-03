@@ -1,0 +1,23 @@
+"VertexLitGeneric"
+{
+	"$basetexture"			"models\weapons\v_models\yog\yoglight_diffuse"
+	"$bumpmap"			"models\weapons\v_models\yog\yoglight_normal"
+	"$phongexponenttexture"		"models\weapons\v_models\yog\yoglight_exponent"
+	"$basetexturealphaenvmapmask"	"1"
+	"$envmap"			"env_cubemap"
+	"$envmaptint"			"[0.3 0.3 0.3]"
+	"$envmapfresnel"			"0.2"
+	"$nocull"				"1"
+
+	"$phong"				"1"
+	"$phongboost"			"1.5"
+	"$phongfresnelranges"		"[1 3 2]"
+//	"$phongalbedotint"			"1"
+//	"$phongalbedoboost"		"1"
+	"$halflambert"			"1"
+
+	"$rimlight"			"1"
+	"$rimlightexponent"			"100"
+	"$rimlightboost"			".5"
+	"$rimmask"			"1"
+}
