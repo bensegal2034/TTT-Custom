@@ -84,6 +84,21 @@ if CLIENT then
 
 end
 
+function SWEP:Initialize()
+   if SERVER then
+      hook.Add("TTTPrepareRound", "ResetNoJump", function()
+         local rf = RecipientFilter()
+         rf:AddAllPlayers()
+         players = rf:GetPlayers()
+         for i = 1, #players do
+            timer.Simple(0.1, function()
+               players[i]:SetJumpPower(160)
+            end)
+         end
+      end)
+   end
+end
+
 -- Always derive from weapon_tttbase.
 SWEP.Base				= "weapon_tttbase"
 
@@ -171,35 +186,4 @@ end
 function SWEP:Holster()
    self.Owner:SetJumpPower(160)
    return true
-end
-
-function SWEP:DrawWorldModel( )
-   local hand, offset, rotate
-
-   if not IsValid( self.Owner ) then
-      self:DrawModel( )
-   return
-end
-
-if not self.Hand then
-   self.Hand = self.Owner:LookupAttachment( "anim_attachment_rh" )
-end
-
-hand = self.Owner:GetAttachment( self.Hand )
-
-if not hand then
-   self:DrawModel( )
-   return
-end
-
-offset = hand.Ang:Right( ) * self.Offset.Pos.Right + hand.Ang:Forward( ) * self.Offset.Pos.Forward + hand.Ang:Up( ) * self.Offset.Pos.Up
-
-hand.Ang:RotateAroundAxis( hand.Ang:Right( ), self.Offset.Ang.Right )
-hand.Ang:RotateAroundAxis( hand.Ang:Forward( ), self.Offset.Ang.Forward )
-hand.Ang:RotateAroundAxis( hand.Ang:Up( ), self.Offset.Ang.Up )
-
-self:SetRenderOrigin( hand.Pos + offset )
-self:SetRenderAngles( hand.Ang )
-
-self:DrawModel( )
 end
