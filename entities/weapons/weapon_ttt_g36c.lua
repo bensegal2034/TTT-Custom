@@ -162,6 +162,12 @@ function SWEP:Deploy()
    return true
 end
 
+function SWEP:PreDrop()
+   self.Owner:SetJumpPower(160)
+   self:SetIronsights(false)
+   return true
+end
+
 function SWEP:Holster()
    self.Owner:SetJumpPower(160)
    return true
