@@ -26,6 +26,7 @@ if SERVER then
 	resource.AddFile("sound/weapons/37/insert3.wav")
 	resource.AddFile("sound/weapons/37/insert4.wav")
 	resource.AddFile("sound/weapons/37/pump.wav")
+	resource.AddFile("sound/weapons/37/oof.wav")
 	resource.AddWorkshop("1088359186")
 end
 
@@ -66,7 +67,7 @@ SWEP.HeadshotMultiplier = 1
 SWEP.data 				= {}				--The starting firemode
 
 SWEP.Primary.NumShots	= 8		-- How many bullets to shoot per trigger pull, AKA pellets
-SWEP.Primary.Damage		= 5	-- Base damage per bullet
+SWEP.Primary.Damage		= 10	-- Base damage per bullet
 
 -- Enter iron sight info and bone mod info below
 
@@ -158,6 +159,45 @@ sound.Add({
 	sound = 			"weapons/37/deploy.wav"
 })
 
+sound.Add({
+	name = "Pump.Hurt",
+	channel = CHAN_ITEM,
+	volume = 1.0,
+	sound = "weapons/37/oof.wav"
+})
+
+function SWEP:Initialize()
+	util.PrecacheSound("weapons/37/oof.wav")
+	self:SetHurtSoundBuffer(false)
+	if CLIENT and self:Clip1() == -1 then
+		self:SetClip1(self.Primary.DefaultClip)
+	elseif SERVER then
+		self.fingerprints = {}
+
+		self:SetIronsights(false)
+	end
+
+	self:SetDeploySpeed(self.DeploySpeed)
+
+		-- compat for gmod update
+	if self.SetHoldType then
+		self:SetHoldType(self.HoldType or "pistol")
+	end
+
+	hook.Add("EntityTakeDamage", "Hurt", function(target, dmg)
+		print(":(")
+		if !target:IsValid() or !target:IsPlayer() then return end
+		local weapon = target:GetActiveWeapon()
+		print(":)")
+		if weapon:GetClass() == "weapon_ttt_pump" then
+			weapon:SetHurtSoundBuffer(true)
+			print("loop!!!!!")
+		end
+	end)
+
+end
+
+
 function SWEP:SecondaryAttack()
 
 end
@@ -167,6 +207,13 @@ function SWEP:SetupDataTables()
     self:NetworkVar("Float", 3, "IronsightsTime")
 	self:NetworkVar("Bool", 0, "Reloading")
 	self:NetworkVar("Float", 0, "ReloadTimer")
+	self:NetworkVar("Bool", 1, "HurtSoundBuffer")
+
+	if SERVER then
+		self:NetworkVarNotify("HurtSoundBuffer", function(name, old, new)
+			print(tostring(name).."||"..tostring(new))
+		end)
+	end
 end
 
 function SWEP:CanPrimaryAttack()
@@ -283,7 +330,19 @@ function SWEP:DrawWorldModel()
 end
 
 
+
 function SWEP:Think()
+	if CLIENT then
+		if self:GetHurtSoundBuffer() then
+			--[[timer.Simple(0.01,function()
+				EmitSound(Sound("weapons/37/oof.wav"), self:GetOwner():GetPos(), -1, CHAN_ITEM, 0.5, SNDLVL_STATIC, SND_NOFLAGS, 100, 0)
+			end)]]--
+			self:SetHurtSoundBuffer(false)
+		end
+	end
+
+	
+
 	if self:GetReloading() then
 	   
  
