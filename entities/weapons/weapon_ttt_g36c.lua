@@ -22,6 +22,54 @@ if SERVER then
    resource.AddWorkshop("403979337")
 end
 
+sound.Add({
+	name = 			"weapon_aug.single",
+	channel = 		CHAN_ITEM,
+	volume = 		1.0,
+	sound = 			"weapons/g36/shoot.wav"
+})
+
+sound.Add({
+	name = 			"g36.boltpull",
+	channel = 		CHAN_ITEM,
+	volume = 		1.0,
+	sound = 			"weapons/g36/boltpull.wav"
+})
+
+sound.Add({
+	name = 			"g36.magout",
+	channel = 		CHAN_ITEM,
+	volume = 		1.0,
+	sound = 			"weapons/g36/magout.wav"
+})
+
+sound.Add({
+	name = 			"g36.magin",
+	channel = 		CHAN_ITEM,
+	volume = 		1.0,
+	sound = 			 "weapons/g36/magin.wav"
+})
+
+sound.Add({
+	name = 			"g36.select",
+	channel = 		CHAN_ITEM,
+	volume = 		1.0,
+	sound = 			 "weapons/g36/select.wav"
+})
+
+sound.Add({
+	name = 			"g36.magdrop",
+	channel = 		CHAN_ITEM,
+	volume = 		1.0,
+	sound = 			 "weapons/g36/magdrop.wav"
+})
+
+sound.Add({
+	name = 			"g36.cloth",
+	channel = 		CHAN_ITEM,
+	volume = 		1.0,
+	sound = 			 "weapons/g36/cloth.wav"
+})
 
 
 if CLIENT then
@@ -115,7 +163,7 @@ function SWEP:Deploy()
 end
 
 function SWEP:Holster()
-   self.Owner:SetJumpPower(200)
+   self.Owner:SetJumpPower(160)
    return true
 end
 
