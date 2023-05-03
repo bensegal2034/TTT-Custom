@@ -29,6 +29,7 @@ SWEP.AccuracyTimer = 0
 SWEP.AccuracyDelay = 0.2
 SWEP.MovementInaccuracy = false
 
+
 SWEP.FirstShotAccuracy = true
 SWEP.FirstShotDelay = 0.5
 SWEP.FSAccuracyTimer = 0
@@ -84,20 +85,20 @@ end
 
 function SWEP:Think()
    if self.Owner:KeyDown(IN_FORWARD) then
-      self.Primary.Cone = 0.5
       self.MovementInaccuracy = true
+      self.Primary.Cone = ((self.Owner:GetVelocity():Length()) / 220)
       self.AccuracyTimer = CurTime() + self.AccuracyDelay
    elseif self.Owner:KeyDown(IN_BACK) then
-      self.Primary.Cone = 0.5
       self.MovementInaccuracy = true
+      self.Primary.Cone = ((self.Owner:GetVelocity():Length()) / 220)
       self.AccuracyTimer = CurTime() + self.AccuracyDelay
    elseif self.Owner:KeyDown(IN_MOVELEFT) then
-      self.Primary.Cone = 0.5
       self.MovementInaccuracy = true
+      self.Primary.Cone = ((self.Owner:GetVelocity():Length()) / 220)
       self.AccuracyTimer = CurTime() + self.AccuracyDelay
    elseif self.Owner:KeyDown(IN_MOVERIGHT) then
-      self.Primary.Cone = 0.5
       self.MovementInaccuracy = true
+      self.Primary.Cone = ((self.Owner:GetVelocity():Length()) / 220)
       self.AccuracyTimer = CurTime() + self.AccuracyDelay
    elseif CurTime() > self.AccuracyTimer then
       self.Primary.Cone = 0.02
@@ -122,4 +123,8 @@ function SWEP:PrimaryAttack()
       self.FSAccuracyTimer = CurTime() + self.FirstShotDelay
    end
    self:SetNextSecondaryFire( CurTime() + 0.1 )
+end
+
+function SWEP:SecondaryAttack()
+
 end
