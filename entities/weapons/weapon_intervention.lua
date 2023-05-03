@@ -88,6 +88,9 @@ function SWEP:SetupDataTables()
 	self:NetworkVar("Float", 2, "TimeLeft");
 	self:NetworkVar("Bool", 0, "CanBodyshot");
 
+   self:NetworkVar("Bool", 3, "IronsightsPredicted")
+   self:NetworkVar("Float", 3, "IronsightsTime")
+
 end
 
 -- end stolen code
@@ -107,8 +110,8 @@ function SWEP:Initialize()
 
       if weapon:GetClass() == "weapon_intervention" then
          if weapon:GetCanBodyshot() then
-            dmginfo.ScaleDamage(10)
-            self:SetCanShoot(false)
+            dmginfo:ScaleDamage(10)
+            weapon:SetCanBodyshot(false)
             if (timer.Exists("NoScopeAwp".. self:EntIndex())) then
                timer.Remove("NoScopeAwp".. self:EntIndex())
             end
@@ -266,6 +269,7 @@ function SWEP:PrimaryAttack(worldsnd)
          self.BaseClass.PrimaryAttack( self.Weapon, worldsnd )
          self.ReloadFiringDelayTimer = 0
          self.IsReloading = false
+         self:SetNextSecondaryFire(CurTime() + 0.01)
       end
    else
       -- shoot delay timer expired, can't shoot
@@ -278,9 +282,6 @@ function SWEP:Think()
       -- we weren't scoped in on the last frame and now we are scoped in
       self.AllowedShootDelayTimer = CurTime() + self.AllowedShootDelay
    end
-   -- math.abs(self.OldYaw - current)
-
-
    self.PreviousScopeState = self:GetIronsights()
 
    -- stolen code
