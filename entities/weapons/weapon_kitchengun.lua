@@ -76,6 +76,10 @@ SWEP.EquipMenuData = {
 
 CreateConVar("kitchen_enablegrenades", "1", 0, "enable grenades")
 
+function SWEP:IsEquipment()
+	return WEPS.IsEquipment(self)
+end
+
 function SWEP:killSounds()
 	if (self.dirtOnMe) then
 		self.dirtOnMe:Stop()
