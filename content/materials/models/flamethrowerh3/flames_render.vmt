@@ -1,0 +1,6 @@
+"UnLitGeneric"
+{
+	"$basetexture" "models/flamethrowerh3/flames_render"
+	"$vertexcolor" 1
+	"$vertexalpha" 1
+}

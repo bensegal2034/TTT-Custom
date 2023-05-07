@@ -1,0 +1,16 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/flamethrowerh3/flamethrower"
+	"$bumpmap"	 	"models/flamethrowerh3/flamethrower_bump"
+	"$selfillum"	 	"1"
+    	"$selfillummask"	"models/flamethrowerh3/flamethrower_illum"
+	$phong 1
+	$phongboost 6
+	$phongfresnelranges "[0 0.35 1]"
+	$phongalbedotint 1
+
+	$rimlight               1
+	$rimlightexponent       40
+	$rimlightboost        1.3
+
+}

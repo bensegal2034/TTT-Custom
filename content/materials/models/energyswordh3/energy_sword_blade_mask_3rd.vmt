@@ -1,0 +1,7 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/energyswordh3/energy_sword_blade_mask"
+	"$translucent" 1
+	"$selfillum" "1"
+
+}

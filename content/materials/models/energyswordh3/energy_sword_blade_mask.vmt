@@ -1,0 +1,7 @@
+"UnLitGeneric"
+{
+	"$basetexture" "models/energyswordh3/energy_sword_blade_mask"
+	"$additive" 1
+	"$selfillum" "1"
+
+}

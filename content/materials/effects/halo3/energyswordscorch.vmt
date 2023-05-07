@@ -1,0 +1,14 @@
+"UnlitGeneric"
+{
+	// Original shader: DecalSelfIllumVertexAlphaBlend
+	"$additive" 1
+	"$translucent" 1
+	"$vertexcolor" 1
+	"$vertexalpha" 1
+	"$decal" 1
+	"$basetexture" "effects/halo3/energyswordscorch"
+	"$decalscale" 0.11
+	"$decalfadeduration" 4.00
+	"$decalfadetime" 0.00
+	"$decalsecondpass" 1
+}

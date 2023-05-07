@@ -1,0 +1,13 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/chief_armsh3/spartan_arm"
+	"$bumpmap"	"models/chief_armsh3/spartan_arm_normal"
+	"$phong"		 "1"
+	"$phongexponent"			"75"			
+	"$phongboost"				"1.0"
+	"$phongfresnelranges"		"[0 0.25 0.8]"
+
+	$rimlight               1
+	$rimlightexponent       40
+	$rimlightboost        0.13
+}

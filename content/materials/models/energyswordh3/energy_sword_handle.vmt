@@ -1,0 +1,15 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/energyswordh3/energy_sword_handle"
+	"$selfillum"	 "1"
+    	"$selfillummask" "models/energyswordh3/energy_blade_handle_illum"
+	"$bumpmap"	 "models/energyswordh3/energy_blade_handle_bump"
+	$phong 1
+	$phongboost 4
+	$phongfresnelranges "[0 0.48 1]"
+	$phongalbedotint 1
+
+	$rimlight               1
+	$rimlightexponent       41
+	$rimlightboost        1.27
+}
