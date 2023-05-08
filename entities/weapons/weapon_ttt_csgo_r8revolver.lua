@@ -116,7 +116,7 @@ sound.Add({
 	name = "Weapon_Revolver_CSGO.Single",
 	channel = CHAN_STATIC,
 	level = 79,
-	sound = Sound")weapons/csgo/revolver/revolver-1_01.wav"
+	sound = Sound"weapons/csgo/revolver/revolver-1_01.wav"
 })
 sound.Add({
 	name = "Weapon_Revolver_CSGO.Prepare",
