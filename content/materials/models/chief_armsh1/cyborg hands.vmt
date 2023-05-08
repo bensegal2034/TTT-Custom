@@ -1,0 +1,15 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/chief_armsh1/cyborg hands"
+	"$bumpmap"	 	"models/chief_armsh1/fp arms bump"
+	"$detail" "models/chief_armsh1/detail"
+	"$detailscale" 10
+	$phong 1
+	$phongboost 0.5
+	$phongfresnelranges "[0 0.1 0.6]"
+	$phongalbedotint 1
+
+	$rimlight               1
+	$rimlightexponent       40
+	$rimlightboost        0.25
+}

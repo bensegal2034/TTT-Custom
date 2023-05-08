@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "models/needlerh3/crystal"
+	"$selfillum"	 "1"
+}

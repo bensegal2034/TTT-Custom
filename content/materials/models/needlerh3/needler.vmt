@@ -1,0 +1,17 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/needlerh3/needler"
+	"$bumpmap"	 	"models/needlerh3/needler_bump"
+	"$selfillum"	 "1"
+    	"$selfillummask"		"models/needlerh3/needler_illum"
+	$phong 1
+	$phongboost 1
+	$phongfresnelranges "[0.5 0.5 0.5]"
+	$phongalbedotint 1
+
+
+	$rimlight               1
+	$rimlightexponent       40
+	$rimlightboost        1.65
+
+}

@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/hud/halo1_pistol"
+	"$translucent" 1
+}

@@ -1,0 +1,17 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/needlerh3/needler_current"
+	"$selfillum"	"1"
+	"$additive"	"1"
+
+	"Proxies"
+        {
+            "TextureScroll"
+            {
+                "textureScrollVar" "$basetexturetransform"
+                "textureScrollRate" 4
+                "textureScrollAngle" 180
+            }
+        }
+
+}

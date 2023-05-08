@@ -1,0 +1,16 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/pistolh1/pistol"
+	"$bumpmap"	 "models/pistolh1/pistol_bump"
+	"$selfillum"	"1"
+	"$selfillummask"  "models/pistolh1/pistol_illum"
+	
+	$phong  1
+	$phongboost  2
+	$phongfresnelranges "[0 0.25 1]"
+	$phongalbedotint  1
+	$rimlight            1
+	$rimlightexponent       90
+	$rimlightboost       1.34
+
+}
