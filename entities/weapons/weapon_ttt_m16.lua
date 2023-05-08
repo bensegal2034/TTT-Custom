@@ -18,18 +18,16 @@ SWEP.Base                  = "weapon_tttbase"
 SWEP.Kind                  = WEAPON_HEAVY
 SWEP.WeaponID              = AMMO_M16
 
-SWEP.Primary.Delay         = 0.14
-SWEP.Primary.Recoil        = 1.4
-SWEP.Primary.Automatic     = false
+SWEP.Primary.Delay         = 0.19
+SWEP.Primary.Recoil        = 1.6
+SWEP.Primary.Automatic     = true
 SWEP.Primary.Ammo          = "Pistol"
-SWEP.Primary.Damage        = 35
-SWEP.Primary.Cone          = 0.008
+SWEP.Primary.Damage        = 23
+SWEP.Primary.Cone          = 0.018
 SWEP.Primary.ClipSize      = 20
 SWEP.Primary.ClipMax       = 60
 SWEP.Primary.DefaultClip   = 20
 SWEP.Primary.Sound         = Sound( "Weapon_M4A1.Single" )
-
-SWEP.HeadshotMultiplier    = 2
 
 SWEP.AutoSpawnable         = true
 SWEP.Spawnable             = true
@@ -42,12 +40,10 @@ SWEP.WorldModel            = "models/weapons/w_rif_m4a1.mdl"
 SWEP.IronSightsPos         = Vector(-7.58, -9.2, 0.55)
 SWEP.IronSightsAng         = Vector(2.599, -1.3, -3.6)
 
-SWEP.EffectData = EffectData()
-
 function SWEP:SetZoom(state)
    if not (IsValid(self:GetOwner()) and self:GetOwner():IsPlayer()) then return end
    if state then
-      self:GetOwner():SetFOV(65, 0.3)
+      self:GetOwner():SetFOV(35, 0.5)
    else
       self:GetOwner():SetFOV(0, 0.2)
    end
@@ -87,21 +83,4 @@ function SWEP:Holster()
    self:SetIronsights(false)
    self:SetZoom(false)
    return true
-end
-
-function SWEP:Initialize()
-   if CLIENT and self:Clip1() == -1 then
-      self:SetClip1(self.Primary.DefaultClip)
-   elseif SERVER then
-      self.fingerprints = {}
-
-      self:SetIronsights(false)
-   end
-
-   self:SetDeploySpeed(self.DeploySpeed)
-
-   -- compat for gmod update
-   if self.SetHoldType then
-      self:SetHoldType(self.HoldType or "pistol")
-   end
 end

@@ -20,23 +20,25 @@ end
 
 SWEP.Base                  = "weapon_tttbase"
 
-SWEP.Primary.Recoil        = 4
-SWEP.Primary.Damage        = 25
-SWEP.Primary.Delay         = 0.56
+SWEP.Primary.Recoil        = 1.35
+SWEP.Primary.Damage        = 28
+SWEP.Primary.Delay         = 0.38
 SWEP.Primary.Cone          = 0.02
-SWEP.Primary.ClipSize      = 30
+SWEP.Primary.ClipSize      = 20
 SWEP.Primary.Automatic     = true
 SWEP.Primary.DefaultClip   = 20
 SWEP.Primary.ClipMax       = 60
 SWEP.Primary.Ammo          = "Pistol"
-SWEP.Tracer = "GaussTracer"
+SWEP.Primary.Sound         = Sound( "Weapon_USP.SilencedShot" )
+SWEP.Primary.SoundLevel    = 50
+
 SWEP.Kind                  = WEAPON_EQUIP
 SWEP.CanBuy                = {ROLE_TRAITOR} -- only traitors can buy
 SWEP.WeaponID              = AMMO_SIPISTOL
-SWEP.Primary.Sound         = Sound( "Weapon_USP.SilencedShot" )
+
 SWEP.AmmoEnt               = "item_ammo_pistol_ttt"
 SWEP.IsSilent              = true
-SWEP.HeadshotMultiplier    = 3
+
 SWEP.UseHands              = true
 SWEP.ViewModel             = "models/weapons/cstrike/c_pist_usp.mdl"
 SWEP.WorldModel            = "models/weapons/w_pist_usp_silencer.mdl"
@@ -57,8 +59,4 @@ function SWEP:WasBought(buyer)
    if IsValid(buyer) then -- probably already self:GetOwner()
       buyer:GiveAmmo( 20, "Pistol" )
    end
-end
-
-function SWEP:Think()
-   
 end
