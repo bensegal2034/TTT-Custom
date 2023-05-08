@@ -11,7 +11,7 @@ if CLIENT then
    SWEP.Icon = "vgui/ttt/icon_scout"
 end
 
-SWEP.Base               = "weapon_tttbase"
+SWEP.Base               = "weapon_intervention_base"
 SWEP.Spawnable = true
 
 SWEP.Kind = WEAPON_HEAVY
@@ -69,6 +69,17 @@ SWEP.wasAbleToShoot = false
 SWEP.startTime = 0
 SWEP.Reloadaftershoot = 0 				-- Can't reload when firing
 
+SWEP.WElements = {
+	["nsAWP"] = { type = "Model", model = "models/weapons/w_asii_awp.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(0.5, 0.8, 0.409), angle = Angle(-169, 180, -0), size = Vector(0.899, 0.899, 0.899), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
+	["gopro"] = { type = "Model", model = "models/dav0r/camera.mdl", bone = "ValveBiped.Bip01_R_Hand", rel = "", pos = Vector(20.26, 1.796, -6.5), angle = Angle(-15.844, 0, 180), size = Vector(0.15, 0.15, 0.15), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+}
+SWEP.VElements = {
+	["screen"] = { type = "Quad", bone = "Bolt", rel = "", pos = Vector(0, 3.65, 0), angle = Angle(0, 3.332, 96.666), size = 0.04, draw_func = nil},
+	["goprosupport"] = { type = "Model", model = "models/combine_turrets/ceiling_turret.mdl", bone = "Body", rel = "", pos = Vector(-0.9, -11.948, 3), angle = Angle(85.324, -3.507, -82.987), size = Vector(0.009, 0.009, 0.009), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} },
+	["gopro"] = { type = "Model", model = "models/dav0r/camera.mdl", bone = "Body", rel = "", pos = Vector(-0.62, -14.027, 3), angle = Angle(3.506, 92.337, 1.169), size = Vector(0.068, 0.068, 0.068), color = Color(255, 255, 255, 255), surpresslightning = false, material = "", skin = 0, bodygroup = {} }
+}
+
+
 
 function angleDifference(a1, a2)
 	local angDiff = a1 - a2
@@ -118,7 +129,36 @@ function SWEP:Initialize()
          end
       end
    end)
+   --[[
+   if CLIENT then
 
+      -- // Create a new table for every weapon instance
+      self.VElements = table.FullCopy( self.VElements )
+      self.WElements = table.FullCopy( self.WElements )
+      self.ViewModelBoneMods = table.FullCopy( self.ViewModelBoneMods )
+
+      self:CreateModels(self.VElements) -- create viewmodels
+      self:CreateModels(self.WElements) -- create worldmodels
+
+      -- // init view model bone build function
+      if IsValid(self.Owner) and self.Owner:IsPlayer() then
+         if self.Owner:Alive() then
+            local vm = self.Owner:GetViewModel()
+            if IsValid(vm) then
+               self:ResetBonePositions(vm)
+               -- // Init viewmodel visibility
+               if (self.ShowViewModel == nil or self.ShowViewModel) then
+                  vm:SetColor(Color(255,255,255,255))
+               else
+                  -- // however for some reason the view model resets to render mode 0 every frame so we just apply a debug material to prevent it from drawing
+                  vm:SetMaterial("Debug/hsv")
+               end
+            end
+
+         end
+      end
+   end
+   ]]--
    -- stolen code
    self:SetCCRot(0) --the counter-clockwise rotation
    self:SetCRot(0) --the clockwise rotation
@@ -341,5 +381,38 @@ function SWEP:Think()
 			self:SetTimeLeft(timer.TimeLeft("NoScopeAwp".. self:EntIndex()))
 		end
 	end
+
+   --[[
+   if CLIENT then
+		self.VElements["screen"].draw_func = function( weapon )
+
+				local displayRot = 0;
+				local cRot = self:GetCRot();
+				local ccRot = self:GetCCRot();
+
+				if (self.Weapon:Clip1() > 0) then
+					if (!self:GetCanBodyshot()) then
+						draw.RoundedBox(0,-38,-14,70,15,Color(100,100,100,100))
+						if (ccRot > cRot) then
+							displayRot = math.floor(ccRot)
+							draw.RoundedBox(0,-38,-14,ccRot*.2083,15,Color(100,100,255,160))
+						else
+							displayRot = math.floor(cRot)
+							draw.RoundedBox(0,-38,-14,cRot*.2083,15,Color(100,100,255,150))
+						end
+
+						draw.SimpleText("COOL METER: "..displayRot, "default", 0, 0, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+					else
+						draw.RoundedBox(0,-38,-14,70,15,Color(100,255,100,100))
+						draw.RoundedBox(0,-38,-14,math.max(self:GetTimeLeft(),0) * (70/self.shootTime),15,Color(100,255,100,200))
+						draw.SimpleText("COOL METER: MLG", "default", 0, 0, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+					end
+				else
+					draw.RoundedBox(0,-38,-14,70,15,Color(255,100,100,150 + math.sin(CurTime()*7) * 50))
+					draw.SimpleText("RELOAD", "default", 0, 0, Color(255,150,150,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+				end
+		end
+	end
+   ]]--
    -- end stolen code
 end
