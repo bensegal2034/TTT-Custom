@@ -178,7 +178,7 @@ sound.Add({
 --SWEP.Speed = 176
 SWEP.CrosshairDistance = 24
 
-SWEP.Primary.Sound = Sound( "Weapon_CSGO_Revolver.Single" )
+SWEP.Primary.Sound = Sound( "Weapon_Revolver_CSGO.Single" )
 SWEP.Primary.ClipSize = 8
 SWEP.Primary.DefaultClip = 8
 SWEP.Primary.Automatic = false
@@ -199,7 +199,7 @@ SWEP.Primary.Force = 3
 
 SWEP.Secondary.ClipSize = 0
 SWEP.Secondary.DefaultClip = 0
-SWEP.Secondary.Automatic = false
+SWEP.Secondary.Automatic = true
 SWEP.Secondary.Ammo = "none"
 SWEP.Secondary.Delay = 0.4
 
