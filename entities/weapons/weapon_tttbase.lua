@@ -99,7 +99,7 @@ SWEP.Primary.Damage         = 1
 SWEP.Primary.NumShots       = 1
 SWEP.Primary.Cone           = 0.02
 SWEP.Primary.Delay          = 0.15
-SWEP.Tracer = "Tracer"
+
 SWEP.Primary.ClipSize       = -1
 SWEP.Primary.DefaultClip    = -1
 SWEP.Primary.Automatic      = false
@@ -303,7 +303,7 @@ function SWEP:ShootBullet( dmg, recoil, numbul, cone )
    bullet.Src    = self:GetOwner():GetShootPos()
    bullet.Dir    = self:GetOwner():GetAimVector()
    bullet.Spread = Vector( cone, cone, 0 )
-   bullet.Tracer = 1
+   bullet.Tracer = 4
    bullet.TracerName = self.Tracer or "Tracer"
    bullet.Force  = 10
    bullet.Damage = dmg

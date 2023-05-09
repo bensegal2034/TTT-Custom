@@ -21,17 +21,16 @@ SWEP.AutoSpawnable         = true
 SWEP.Kind                  = WEAPON_HEAVY
 SWEP.WeaponID              = AMMO_M249
 
-SWEP.Primary.Damage        = 1
-SWEP.Primary.Delay         = 0.02
-SWEP.Primary.Cone          = 0.09
+SWEP.Primary.Damage        = 4
+SWEP.Primary.Delay         = 0
+SWEP.Primary.Cone          = 0.04
 SWEP.Primary.ClipSize      = 300
 SWEP.Primary.ClipMax       = 900
-SWEP.Primary.DefaultClip   = 600
+SWEP.Primary.DefaultClip   = 300
 SWEP.Primary.Automatic     = true
-SWEP.Primary.Ammo          = "SMG1"
-SWEP.Primary.Recoil        = 4
+SWEP.Primary.Ammo          = "AirboatGun"
+SWEP.Primary.Recoil        = 2.2
 SWEP.Primary.Sound         = Sound("Weapon_m249.Single")
-SWEP.AmmoEnt = "item_ammo_smg1_ttt"
 
 SWEP.UseHands              = true
 SWEP.ViewModel             = "models/weapons/cstrike/c_mach_m249para.mdl"

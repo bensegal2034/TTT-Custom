@@ -13,16 +13,16 @@ if CLIENT then
    SWEP.IconLetter         = "w"
 end
 
-SWEP.Base                  = "weapon_tttbase_nofalloff"
+SWEP.Base                  = "weapon_tttbase"
 
 SWEP.Kind                  = WEAPON_HEAVY
 SWEP.WeaponID              = AMMO_M16
 
-SWEP.Primary.Delay         = 0.27
+SWEP.Primary.Delay         = 0.14
 SWEP.Primary.Recoil        = 1.4
-SWEP.Primary.Automatic     = true
+SWEP.Primary.Automatic     = false
 SWEP.Primary.Ammo          = "Pistol"
-SWEP.Primary.Damage        = 15
+SWEP.Primary.Damage        = 35
 SWEP.Primary.Cone          = 0.008
 SWEP.Primary.ClipSize      = 20
 SWEP.Primary.ClipMax       = 60
@@ -104,18 +104,4 @@ function SWEP:Initialize()
    if self.SetHoldType then
       self:SetHoldType(self.HoldType or "pistol")
    end
-   hook.Add("PlayerHurt", "ExplosivePayload", function(victim, attacker, healthRemaining, damageTaken)
-      if (attacker == self:GetOwner()) and attacker:IsPlayer() then
-         if (damageTaken > 1) then
-            if self:GetOwner():GetActiveWeapon():GetClass() == self:GetClass() then
-               timer.Simple(0.02,function()
-                  util.BlastDamage(self:GetOwner(), self, victim:GetPos(), 10, 10)
-                  self.EffectData:SetMagnitude(1020)
-                  self.EffectData:SetOrigin(victim:GetPos())
-                  util.Effect( "Explosion", self.EffectData, false, true )
-               end)
-            end
-         end
-      end
-   end)
 end
