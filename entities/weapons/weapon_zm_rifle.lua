@@ -22,17 +22,17 @@ SWEP.Primary.Delay         = 1.5
 SWEP.Primary.Recoil        = 7
 SWEP.Primary.Automatic     = true
 SWEP.Primary.Ammo          = "357"
-SWEP.Primary.Damage        = 50
-SWEP.Primary.Cone          = 0.005
-SWEP.Primary.ClipSize      = 10
-SWEP.Primary.ClipMax       = 20 -- keep mirrored to ammo
-SWEP.Primary.DefaultClip   = 10
+SWEP.Primary.Damage        = 1
+SWEP.Primary.Cone          = 0.35
+SWEP.Primary.ClipSize      = 3
+SWEP.Primary.ClipMax       = 9 -- keep mirrored to ammo
+SWEP.Primary.DefaultClip   = 3
 SWEP.Primary.Sound         = Sound("Weapon_Scout.Single")
-
+SWEP.SetClipQueued         = false
 SWEP.Secondary.Sound       = Sound("Default.Zoom")
 
-SWEP.HeadshotMultiplier    = 4
-
+SWEP.HeadshotMultiplier    = 999
+SWEP.IsScoped              = false
 SWEP.AutoSpawnable         = true
 SWEP.Spawnable             = true
 SWEP.AmmoEnt               = "item_ammo_357_ttt"
@@ -54,15 +54,34 @@ function SWEP:SetZoom(state)
    end
 end
 
+
+
+
 function SWEP:PrimaryAttack( worldsnd )
+   local currentClip = self:Clip1() 
+   if self.IsScoped == true then
+      self.Primary.Cone = 0
+   else
+      self.Primary.Cone = 0.35
+   end
    self.BaseClass.PrimaryAttack( self.Weapon, worldsnd )
    self:SetNextSecondaryFire( CurTime() + 0.1 )
+   local traceRes = self.Owner:GetEyeTrace()
+   if traceRes.HitWorld then
+      if (currentClip != 0) then
+         self:SetClip1(self:Clip1() + 1)
+      end
+   end
 end
-
 -- Add some zoom to ironsights for this gun
 function SWEP:SecondaryAttack()
    if not self.IronSightsPos then return end
    if self:GetNextSecondaryFire() > CurTime() then return end
+   if self.IsScoped == false then
+      self.IsScoped = true
+   else
+      self.IsScoped = false
+   end
 
    local bIronsights = not self:GetIronsights()
 
@@ -72,13 +91,14 @@ function SWEP:SecondaryAttack()
    if (CLIENT) then
       self:EmitSound(self.Secondary.Sound)
    end
-
    self:SetNextSecondaryFire( CurTime() + 0.3)
 end
-
 function SWEP:PreDrop()
    self:SetZoom(false)
    self:SetIronsights(false)
+   if self.IsScoped == true then
+      self.IsScoped = false
+   end
    return self.BaseClass.PreDrop(self)
 end
 
@@ -87,12 +107,18 @@ function SWEP:Reload()
    self:DefaultReload( ACT_VM_RELOAD )
    self:SetIronsights( false )
    self:SetZoom( false )
+   if self.IsScoped == true then
+      self.IsScoped = false
+   end
 end
 
 
 function SWEP:Holster()
    self:SetIronsights(false)
    self:SetZoom(false)
+   if self.IsScoped == true then
+      self.IsScoped = false
+   end
    return true
 end
 

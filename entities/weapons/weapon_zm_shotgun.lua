@@ -1,5 +1,5 @@
 AddCSLuaFile()
-
+resource.AddFile( "sound/weapons/slug.wav" )
 DEFINE_BASECLASS "weapon_tttbase"
 
 SWEP.HoldType              = "shotgun"
@@ -21,16 +21,21 @@ SWEP.Kind                  = WEAPON_HEAVY
 SWEP.WeaponID              = AMMO_SHOTGUN
 
 SWEP.Primary.Ammo          = "Buckshot"
-SWEP.Primary.Damage        = 11
-SWEP.Primary.Cone          = 0.082
-SWEP.Primary.Delay         = 0.8
+SWEP.Primary.Damage        = 9
+SWEP.Primary.Cone          = 0.075
+SWEP.Primary.Delay         = 0.4
 SWEP.Primary.ClipSize      = 8
 SWEP.Primary.ClipMax       = 24
 SWEP.Primary.DefaultClip   = 8
 SWEP.Primary.Automatic     = true
 SWEP.Primary.NumShots      = 8
 SWEP.Primary.Sound         = Sound( "Weapon_XM1014.Single" )
-SWEP.Primary.Recoil        = 7
+SWEP.Primary.Recoil        = 12
+SWEP.Secondary.Delay       = 0.6
+
+
+SWEP.Secondary.Automatic   = true
+
 
 SWEP.AutoSpawnable         = true
 SWEP.Spawnable             = true
@@ -71,7 +76,7 @@ function SWEP:StartReload()
    self:SetIronsights( false )
 
    self:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
-
+   self:SetNextSecondaryFire( CurTime() + self.Secondary.Delay)
    local ply = self:GetOwner()
 
    if not ply or ply:GetAmmoCount(self.Primary.Ammo) <= 0 then
@@ -98,6 +103,7 @@ function SWEP:PerformReload()
 
    -- prevent normal shooting in between reloads
    self:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
+   self:SetNextSecondaryFire( CurTime() + self.Secondary.Delay )
 
    if not ply or ply:GetAmmoCount(self.Primary.Ammo) <= 0 then return end
 
@@ -122,6 +128,7 @@ function SWEP:CanPrimaryAttack()
    if self:Clip1() <= 0 then
       self:EmitSound( "Weapon_Shotgun.Empty" )
       self:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
+      self:SetNextSecondaryFire( CurTime() + self.Secondary.Delay )
       return false
    end
    return true
@@ -130,7 +137,7 @@ end
 function SWEP:Think()
    BaseClass.Think(self)
    if self:GetReloading() then
-      if self:GetOwner():KeyDown(IN_ATTACK) then
+      if self:GetOwner():KeyDown(IN_ATTACK) or self:GetOwner():KeyDown(IN_ATTACK2) then
          self:FinishReload()
          return
       end
@@ -173,9 +180,19 @@ function SWEP:GetHeadshotMultiplier(victim, dmginfo)
 end
 
 function SWEP:SecondaryAttack()
-   if self.NoSights or (not self.IronSightsPos) or self:GetReloading() then return end
+   self.Primary.Sound    = Sound("weapons/slug.wav")
+   self.Primary.Damage   = 50
+   self.Primary.NumShots = 1
+   self.Primary.Cone     = 0
+   self.BaseClass.PrimaryAttack( self.Weapon, worldsnd )
+   self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
+end
 
-   self:SetIronsights(not self:GetIronsights())
+function SWEP:PrimaryAttack()
+   self.Primary.Sound    = Sound( "Weapon_XM1014.Single" )
+   self.Primary.Cone     = 0.075
+   self.Primary.NumShots = 8
+   self.Primary.Damage   = 9
+   self.BaseClass.PrimaryAttack( self.Weapon, worldsnd )
 
-   self:SetNextSecondaryFire(CurTime() + 0.3)
 end

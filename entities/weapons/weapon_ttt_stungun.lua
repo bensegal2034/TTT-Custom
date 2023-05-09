@@ -25,7 +25,7 @@ SWEP.WeaponID              = AMMO_STUN
 SWEP.CanBuy                = {ROLE_DETECTIVE}
 SWEP.LimitedStock          = false
 SWEP.AmmoEnt               = "item_ammo_smg1_ttt"
-
+SWEP.Tracer = "AR2Tracer"
 SWEP.Primary.Damage        = 9
 SWEP.Primary.Delay         = 0.1
 SWEP.Primary.Cone          = 0.02
@@ -47,6 +47,22 @@ SWEP.IronSightsAng         = Vector(-1.201, -0.201, -2)
 SWEP.HeadshotMultiplier    = 4.5 -- brain fizz
 --SWEP.DeploySpeed = 3
 
+function SWEP:Shake()
+	if SERVER then
+		local shake = ents.Create( "env_shake" )
+			shake:SetOwner( self.Owner )
+			shake:SetPos( self:GetPos() )
+			shake:SetKeyValue( "amplitude", "100" )
+			shake:SetKeyValue( "radius", "64" )
+			shake:SetKeyValue( "duration", "1.5" )
+			shake:SetKeyValue( "frequency", "255" )
+			shake:SetKeyValue( "spawnflags", "4" )
+			shake:Spawn()
+			shake:Activate()
+			shake:Fire( "StartShake", "", 0 )
+	end
+end
+
 function SWEP:ShootBullet( dmg, recoil, numbul, cone )
    local sights = self:GetIronsights()
 
@@ -61,7 +77,8 @@ function SWEP:ShootBullet( dmg, recoil, numbul, cone )
    bullet.Src    = self:GetOwner():GetShootPos()
    bullet.Dir    = self:GetOwner():GetAimVector()
    bullet.Spread = Vector( cone, cone, 0 )
-   bullet.Tracer = 4
+   bullet.Tracer = 1
+   bullet.TracerName = self.Tracer
    bullet.Force  = 5
    bullet.Damage = dmg
 
@@ -76,7 +93,7 @@ function SWEP:ShootBullet( dmg, recoil, numbul, cone )
                               edata:SetScale(2)
 
                               util.Effect("TeslaHitBoxes", edata)
-
+                              self:Shake()
                               if SERVER and ent:IsPlayer() then
                                  local eyeang = ent:EyeAngles()
 

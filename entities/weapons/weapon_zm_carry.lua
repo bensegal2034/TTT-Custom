@@ -59,7 +59,7 @@ local wep_range = CreateConVar("ttt_weapon_carrying_range", "50")
 
 -- not customizable via convars as some objects rely on not being carryable for
 -- gameplay purposes
-CARRY_WEIGHT_LIMIT = 45
+CARRY_WEIGHT_LIMIT = 500
 
 local PIN_RAG_RANGE = 90
 
@@ -218,7 +218,7 @@ function SWEP:MoveObject(phys, pdir, maxforce, is_ragdoll)
    local speed = phys:GetVelocity():Length()
 
    -- remap speed from 0 -> 125 to force 1 -> 4000
-   local force = maxforce + (1 - maxforce) * (speed / 125)
+   local force = maxforce + (maxforce) * (speed / 2)
 
    if is_ragdoll then
       force = force * 2
