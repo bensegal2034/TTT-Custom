@@ -11,7 +11,7 @@ if CLIENT then
    SWEP.Icon = "vgui/ttt/icon_scout"
 end
 
-SWEP.Base               = "weapon_intervention_base"
+SWEP.Base               = "weapon_tttbase"
 SWEP.Spawnable = true
 
 SWEP.Kind = WEAPON_HEAVY
