@@ -781,7 +781,7 @@ function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
            hitgroup == HITGROUP_RIGHTLEG or
            hitgroup == HITGROUP_GEAR ) then
 
-      dmginfo:ScaleDamage(0.55)
+      dmginfo:ScaleDamage(1)
    end
 
    -- Keep ignite-burn damage etc on old levels
