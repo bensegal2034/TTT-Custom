@@ -42,7 +42,7 @@ end
 
 SWEP.Base = "weapon_tttbase"
 
-SWEP.Kind = WEAPON_HEAVY
+SWEP.Kind = WEAPON_PISTOL
 
 SWEP.Primary.Damage      = 1
 SWEP.Primary.Delay       = 0.60
